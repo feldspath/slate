@@ -5,8 +5,10 @@
 
 #include <string>
 
+#include "../event/observer.hpp"
+
 namespace slate {
-    class Window {
+    class Window : public Observer {
     private:
         GLFWwindow* id;
         unsigned int width;
@@ -22,6 +24,8 @@ namespace slate {
 
         unsigned int get_width() const;
         unsigned int get_height() const;
+
+        void on_notify(Event event) override;
 
     };
 }

@@ -1,11 +1,17 @@
-#include "window.hpp"
-
 #include <iostream>
+#include <memory>
+
+#include "window.hpp"
+#include "callbacks.hpp"
 
 
 namespace slate {
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-        glViewport(0, 0, width, height);
+        Event e;
+        e.type = EventType::WINDOW_RESIZE;
+        e.add_integer_arg("width", width);
+        e.add_integer_arg("height", height);
+        Callback::get().window_resize.notify(e);
     }
 
     Window::Window(unsigned int width_, unsigned int height_, const std::string& name) : width(width_), height(height_) {
@@ -28,6 +34,7 @@ namespace slate {
         }
         glfwMakeContextCurrent(id);
         glfwSetFramebufferSizeCallback(id, framebuffer_size_callback);
+        Callback::get().window_resize.add_observer(std::shared_ptr<Window>(this));
 
         // GLAD init
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -61,5 +68,12 @@ namespace slate {
     unsigned int Window::get_height() const {
         return height;
     }
+
+    void Window::on_notify(Event event) {
+        width = event.read_integer_arg("width");
+        height = event.read_integer_arg("height");
+        glViewport(0, 0, width, height);
+    }
+
     
 }

@@ -8,7 +8,7 @@ namespace slate {
     }
 
     Renderer::~Renderer() {
-
+        
     }
 
     void Renderer::load_shaders() {
