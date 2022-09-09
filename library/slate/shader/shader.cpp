@@ -6,7 +6,7 @@
 #include <sstream>
 
 namespace slate {
-    Shader::Shader(std::string vertex_shader_path, std::string fragment_shader_path) : vs_path(vertex_shader_path), fs_path(fragment_shader_path) {
+    Shader::Shader(const std::string& vertex_shader_path, const std::string& fragment_shader_path) : vs_path(vertex_shader_path), fs_path(fragment_shader_path) {
         // Retrieve code
         const auto vs_str = read_file(vertex_shader_path);
         const auto fs_str = read_file(fragment_shader_path);
@@ -51,7 +51,7 @@ namespace slate {
         glUseProgram(program_id);
     }
 
-    std::string Shader::read_file(std::string path) {
+    std::string Shader::read_file(const std::string& path) {
         std::string file_text;
         std::ifstream file(path);
 
@@ -86,5 +86,25 @@ namespace slate {
             glGetProgramInfoLog(program_id, 512, NULL, info_log);
             std::cerr << "Error::Shader::Program::Linking: " << info_log << '\n';
         }
+    }
+
+    void Shader::set_uniform(const std::string& name, const float value) const {
+        glUniform1f(glGetUniformLocation(program_id, name.c_str()), value);
+    }
+
+    void Shader::set_uniform(const std::string& name, const glm::vec2& value) const {
+        glUniform2fv(glGetUniformLocation(program_id, name.c_str()), 1, &value[0]);
+    }
+
+    void Shader::set_uniform(const std::string& name, const glm::vec3& value) const {
+        glUniform3fv(glGetUniformLocation(program_id, name.c_str()), 1, &value[0]);
+    }
+
+    void Shader::set_uniform(const std::string& name, const glm::vec4& value) const {
+        glUniform4fv(glGetUniformLocation(program_id, name.c_str()), 1, &value[0]);
+    }
+
+    void Shader::set_uniform(const std::string& name, const glm::mat4& value) const {
+        glUniformMatrix4fv(glGetUniformLocation(program_id, name.c_str()), 1, GL_FALSE, &value[0][0]);
     }
 }

@@ -8,7 +8,7 @@ namespace slate {
         glViewport(0, 0, width, height);
     }
 
-    Window::Window(unsigned int width, unsigned int height, std::string name) {
+    Window::Window(unsigned int width_, unsigned int height_, const std::string& name) : width(width_), height(height_) {
         // GLFW init
         glfwInit();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -45,17 +45,21 @@ namespace slate {
             glfwSetWindowShouldClose(id, true);
     }
 
-    void Window::begin_frame() {
-        process_input();
-    }
-
     void Window::end_frame() {
         glfwSwapBuffers(id);
         glfwPollEvents();
     }
 
-    bool Window::should_continue() {
-        return !glfwWindowShouldClose(id);
+    bool Window::should_close() const {
+        return glfwWindowShouldClose(id);
+    }
+
+    unsigned int Window::get_width() const {
+        return width;
+    }
+
+    unsigned int Window::get_height() const {
+        return height;
     }
     
 }

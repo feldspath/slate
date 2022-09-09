@@ -9,32 +9,27 @@ const unsigned int SCR_HEIGHT = 600;
 
 int main()
 {
-    slate::Window window(SCR_WIDTH, SCR_HEIGHT, "Slate");
+    slate::Renderer renderer(SCR_WIDTH, SCR_HEIGHT, "Slate");
 
     std::vector<glm::vec3> vertices = {
         glm::vec3(-0.5f, -0.5f, 0.0f), // left  
         glm::vec3(0.5f, -0.5f, 0.0f), // right 
         glm::vec3(0.0f,  0.5f, 0.0f)  // top   
     };
-
     auto triangle = std::make_shared<slate::Mesh>(vertices);
+    auto transform = glm::mat4(1.0f);
+    transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, -6.0f));
 
-    slate::Renderer renderer;
-    renderer.add_instance(triangle);
+    renderer.add_instance(triangle, transform);
 
     // render loop
     // -----------
-    while (window.should_continue()) {
-        window.begin_frame();
-
-        // render
-        // ------
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+    while (renderer.should_continue()) {
+        renderer.begin_frame();
 
         renderer.render();
 
-        window.end_frame();
+        renderer.end_frame();
     }
 
     return 0;

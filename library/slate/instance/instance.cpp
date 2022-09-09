@@ -6,4 +6,12 @@ namespace slate {
     void Instance::draw() const {
         mesh->draw();
     }
+
+    glm::mat4& Instance::get_transform() {
+        return transform;
+    }
+
+    const glm::mat4& Instance::get_transform() const {
+        return transform;
+    }
 }

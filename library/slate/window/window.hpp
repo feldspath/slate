@@ -9,15 +9,19 @@ namespace slate {
     class Window {
     private:
         GLFWwindow* id;
-        void process_input();
+        unsigned int width;
+        unsigned int height;
 
     public:
-        Window(unsigned int width, unsigned int height, std::string name);
+        Window(unsigned int width_, unsigned int height_, const std::string& name);
         ~Window();
 
-        void begin_frame();
+        void process_input();
         void end_frame();
-        bool should_continue();
+        bool should_close() const;
+
+        unsigned int get_width() const;
+        unsigned int get_height() const;
 
     };
 }
