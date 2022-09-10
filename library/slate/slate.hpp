@@ -7,6 +7,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "helper_dirs.hpp"
+
 #include "shader/shader.hpp"
 #include "window/window.hpp"
 #include "mesh/mesh.hpp"

@@ -1,6 +1,9 @@
 #include "renderer.hpp"
 
-#include "../window/window.hpp"
+#include "slate/window/window.hpp"
+#include "slate/helper_dirs.hpp"
+
+#include <string>
 
 namespace slate {
     Renderer::Renderer(unsigned int width, unsigned int height, const std::string& name) : window(width, height, name.c_str()) {
@@ -12,7 +15,9 @@ namespace slate {
     }
 
     void Renderer::load_shaders() {
-        default_shader = std::make_shared<slate::Shader>("src/shaders/default.vs", "src/shaders/default.fs");
+        std::string default_vs_path = std::string(SLATE_DIR) + std::string("shader/presets/default/default.vs");
+        std::string default_fs_path = std::string(SLATE_DIR) + std::string("shader/presets/default/default.fs");
+        default_shader = std::make_shared<slate::Shader>(default_vs_path, default_fs_path);
     }
 
     void Renderer::render() {

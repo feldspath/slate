@@ -44,9 +44,4 @@ endif()
 target_link_libraries(${executable_name} ${GLFW_LIBRARIES})
 if(UNIX)
    target_link_libraries(${executable_name} dl pthread) #dlopen is required by Glad on Unix
-
-   add_custom_command(TARGET ${executable_name} 
-   POST_BUILD
-   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${executable_name}> ${CMAKE_CURRENT_SOURCE_DIR})
-
 endif()

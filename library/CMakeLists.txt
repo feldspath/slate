@@ -1,4 +1,4 @@
-#allows to include vcl as #include "vcl/vcl.hpp"
+#allows to include slate as #include "slate/slate.hpp"
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 
 #include slate lib directory

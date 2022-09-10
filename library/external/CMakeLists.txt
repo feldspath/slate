@@ -1,10 +1,9 @@
-# Add all source files of third parties
-file(
-    GLOB_RECURSE
-    src_files_external
-    ${CMAKE_CURRENT_LIST_DIR}/*.[ch]pp
-    ${CMAKE_CURRENT_LIST_DIR}/*.[ch]
-)
+# Add all source files of external libraries
+set(src_files_external "${CMAKE_CURRENT_LIST_DIR}/glad/src/glad.c")
+
+# Add glm and glad include folders
+include_directories("${CMAKE_CURRENT_LIST_DIR}/glm/include")
+include_directories("${CMAKE_CURRENT_LIST_DIR}/glad/include/")
 
 # Enable IMGUI to work with GLAD
 # add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_GLAD)
@@ -20,7 +19,8 @@ endif()
 
 # Include GLFW precompiled lib for Windows/Visual Studio
 if(MSVC)
-    set(GLFW_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/precompiled/windows/glfw/include")
+    set(GLFW_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/glfw/include")
     include_directories(${GLFW_INCLUDE_DIRS})
-    set(GLFW_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/precompiled/windows/glfw/lib/glfw3.lib")
+    set(GLFW_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/glfw/lib/glfw3.lib")
 endif()
+
