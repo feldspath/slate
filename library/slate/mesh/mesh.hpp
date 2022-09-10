@@ -1,13 +1,13 @@
 #pragma once
 
-#include "../glad/glad.hpp"
+#include <memory>
+#include <vector>
+
+#include <slate/glad/glad.hpp>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
-#include <memory>
-#include <vector>
 
 namespace slate {
     class Mesh {

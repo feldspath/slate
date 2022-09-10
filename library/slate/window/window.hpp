@@ -1,11 +1,12 @@
 #pragma once
 
-#include "../glad/glad.hpp"
-#include <GLFW/glfw3.h>
-
 #include <string>
 
-#include "../event/observer.hpp"
+#include <slate/glad/glad.hpp>
+#include <GLFW/glfw3.h>
+
+#include <slate/event/observer.hpp>
+
 
 namespace slate {
     class Window : public Observer {

@@ -1,9 +1,10 @@
+#include <string>
+
+#include <slate/window/window.hpp>
+#include <slate/helper_dirs.hpp>
+
 #include "renderer.hpp"
 
-#include "slate/window/window.hpp"
-#include "slate/helper_dirs.hpp"
-
-#include <string>
 
 namespace slate {
     Renderer::Renderer(unsigned int width, unsigned int height, const std::string& name) : window(width, height, name.c_str()) {

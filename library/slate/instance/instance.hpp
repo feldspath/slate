@@ -4,8 +4,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "../mesh/mesh.hpp"
-#include "../shader/shader.hpp"
+#include <slate/mesh/mesh.hpp>
+#include <slate/shader/shader.hpp>
 
 namespace slate {
     class Instance {

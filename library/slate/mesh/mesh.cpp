@@ -1,11 +1,12 @@
-#include "mesh.hpp"
+#include <vector>
+#include <iostream>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <vector>
-#include <iostream>
+#include "mesh.hpp"
+
 
 namespace slate {
     Mesh::Mesh(const std::vector<glm::vec3> vertices) {

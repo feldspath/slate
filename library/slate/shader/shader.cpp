@@ -1,9 +1,11 @@
-#include "../glad/glad.hpp"
-#include "shader.hpp"
 #include <fstream>
 #include <string>
 #include <iostream>
 #include <sstream>
+
+#include <slate/glad/glad.hpp>
+
+#include "shader.hpp"
 
 namespace slate {
     Shader::Shader(const std::string& vertex_shader_path, const std::string& fragment_shader_path) : vs_path(vertex_shader_path), fs_path(fragment_shader_path) {

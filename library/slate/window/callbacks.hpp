@@ -3,7 +3,7 @@
 #include <vector>
 #include <memory>
 
-#include "../event/subject.hpp"
+#include <slate/event/subject.hpp>
 
 namespace slate {
     class Callback {

@@ -1,14 +1,11 @@
 #pragma once
 
-#include "../glad/glad.hpp"
+#include <string>
+#include <memory>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
-#include <string>
-#include <memory>
-
 
 namespace slate {
 
