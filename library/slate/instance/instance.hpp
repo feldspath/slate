@@ -20,4 +20,6 @@ namespace slate {
         glm::mat4& get_transform();
         const glm::mat4& get_transform() const;
     };
+
+    using InstancePtr = std::shared_ptr<Instance>;
 }

@@ -16,18 +16,22 @@ int main()
         glm::vec3(0.5f, -0.5f, 0.0f), // right 
         glm::vec3(0.0f,  0.5f, 0.0f)  // top   
     };
-    auto triangle = std::make_shared<slate::Mesh>(vertices);
-    auto transform = glm::mat4(1.0f);
-    transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, -6.0f));
+    auto triangle_mesh = std::make_shared<slate::Mesh>(vertices);
 
-    renderer.add_instance(triangle, transform);
+    slate::Scene scene;
+    scene.add_instance("triangle", triangle_mesh);
+
+    auto triangle_instance = scene.get_instance_by_name("triangle");
 
     // render loop
     // -----------
     while (renderer.should_continue()) {
         renderer.begin_frame();
 
-        renderer.render();
+        auto transform = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -6.0f + 3.0f * sin(glfwGetTime())));
+        triangle_instance->get_transform() = transform;
+
+        renderer.render(scene);
 
         renderer.end_frame();
     }

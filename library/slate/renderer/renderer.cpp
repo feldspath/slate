@@ -12,7 +12,7 @@ namespace slate {
     }
 
     Renderer::~Renderer() {
-        
+
     }
 
     void Renderer::load_shaders() {
@@ -21,11 +21,11 @@ namespace slate {
         default_shader = std::make_shared<slate::Shader>(default_vs_path, default_fs_path);
     }
 
-    void Renderer::render() {
+    void Renderer::render(Scene scene) {
         // Matrices
         const auto view_matrix = glm::mat4(1.0f);
-        const auto projection_matrix = glm::perspective(glm::radians(45.0f), (float)window.get_width()/(float)window.get_height(), 0.1f, 100.0f);
-        
+        const auto projection_matrix = glm::perspective(glm::radians(45.0f), (float)window.get_width() / (float)window.get_height(), 0.1f, 100.0f);
+
         // Clear buffers
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -34,15 +34,10 @@ namespace slate {
         default_shader->use();
         default_shader->set_uniform("view_matrix", view_matrix);
         default_shader->set_uniform("projection_matrix", projection_matrix);
-        for (const auto& instance : instances) {
-            default_shader->set_uniform("model_matrix", instance.get_transform());
-            instance.draw();
+        for (const auto& instance : scene.get_instances_map()) {
+            default_shader->set_uniform("model_matrix", instance.second->get_transform());
+            instance.second->draw();
         }
-    }
-
-    void Renderer::add_instance(MeshPtr mesh, glm::mat4 transform) {
-        meshes.push_back(mesh);
-        instances.emplace_back(mesh, transform);
     }
 
     void Renderer::begin_frame() {
@@ -54,7 +49,7 @@ namespace slate {
     }
 
     bool Renderer::should_continue() const {
-        return !window.should_close(); 
+        return !window.should_close();
     }
 
 
