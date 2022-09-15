@@ -7,11 +7,9 @@
 
 namespace slate {
     class Callback {
-    private:
-        static Callback singleton;
-
     public:
         Subject window_resize;
+        Subject mouse_move;
 
         static Callback& get();
     };

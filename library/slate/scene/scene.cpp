@@ -20,7 +20,4 @@ namespace slate {
     const std::map<std::string, InstancePtr>& Scene::get_instances_map() {
         return instances;
     }
-
-
-
 }

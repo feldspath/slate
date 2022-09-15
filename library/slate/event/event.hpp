@@ -7,6 +7,8 @@
 namespace slate {
     enum class EventType {
         WINDOW_RESIZE,
+        MOUSE_MOVE,
+        COUNT
     };
 
     struct EventArg {

@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 
 #include <slate/event/observer.hpp>
+#include <slate/camera/base/camera_base.hpp>
 
 
 namespace slate {
@@ -28,5 +29,7 @@ namespace slate {
 
         void on_notify(Event event) override;
 
+        void disable_cursor();
+        void enable_cursor();
     };
 }

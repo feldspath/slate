@@ -14,6 +14,14 @@ namespace slate {
         Callback::get().window_resize.notify(e);
     }
 
+    static void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+        Event e;
+        e.type = EventType::MOUSE_MOVE;
+        e.add_float_arg("mouse_x", static_cast<float>(xpos));
+        e.add_float_arg("mouse_y", static_cast<float>(ypos));
+        Callback::get().mouse_move.notify(e);
+    }
+
     Window::Window(unsigned int width_, unsigned int height_, const std::string& name) : width(width_), height(height_) {
         // GLFW init
         glfwInit();
@@ -34,7 +42,7 @@ namespace slate {
         }
         glfwMakeContextCurrent(id);
         glfwSetFramebufferSizeCallback(id, framebuffer_size_callback);
-        Callback::get().window_resize.add_observer(std::shared_ptr<Window>(this));
+        glfwSetCursorPosCallback(id, mouse_callback);
 
         // GLAD init
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -73,6 +81,14 @@ namespace slate {
         width = event.read_integer_arg("width");
         height = event.read_integer_arg("height");
         glViewport(0, 0, width, height);
+    }
+
+    void Window::disable_cursor() {
+        glfwSetInputMode(id, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    }
+
+    void Window::enable_cursor() {
+        glfwSetInputMode(id, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
 
     
