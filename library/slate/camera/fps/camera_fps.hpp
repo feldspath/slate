@@ -12,8 +12,10 @@ namespace slate {
 
     public:
         float sensitivity = 0.001f;
+        float speed = 0.1f;
 
         CameraFPS();
         void on_notify(Event event) override;
+        void move(glm::vec3 direction) override;
     };
 }

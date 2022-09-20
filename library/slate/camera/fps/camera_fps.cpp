@@ -26,4 +26,8 @@ namespace slate {
 
         orientation = camera_movement * orientation;
     }
+
+    void CameraFPS::move(glm::vec3 direction) {
+        position += glm::mat3(frame_matrix()) * direction * speed;
+    }
 }

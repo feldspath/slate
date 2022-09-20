@@ -5,10 +5,12 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/quaternion.hpp>
 
+#include <slate/actor/actor.hpp>
+
 #include <memory>
 
 namespace slate {
-    class CameraBase {
+    class CameraBase : public Actor {
     protected:
         glm::vec3 position;
         glm::quat orientation;

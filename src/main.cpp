@@ -28,7 +28,7 @@ int main()
     while (renderer.should_continue()) {
         renderer.begin_frame();
 
-        auto transform = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -6.0f + 3.0f * sin(glfwGetTime())));
+        auto transform = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -6.0f + 3.0f * sin(0.0f)));
         triangle_instance->get_transform() = transform;
 
         renderer.render(scene);

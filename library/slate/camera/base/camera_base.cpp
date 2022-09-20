@@ -16,14 +16,14 @@ namespace slate {
     }
 
     glm::vec3 CameraBase::front() const {
-        return frame_matrix() * glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
+        return glm::mat3(frame_matrix()) * glm::vec3(0.0f, 0.0f, -1.0f);
     }
 
     glm::vec3 CameraBase::up() const {
-        return frame_matrix() * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
+        return glm::mat3(frame_matrix()) * glm::vec3(0.0f, 1.0f, 0.0f);
     }
 
     glm::vec3 CameraBase::right() const {
-        return frame_matrix() * glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
+        return glm::mat3(frame_matrix()) * glm::vec3(1.0f, 0.0f, 0.0f);
     }
 }

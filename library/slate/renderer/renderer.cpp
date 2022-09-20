@@ -16,6 +16,8 @@ namespace slate {
         window->disable_cursor();
         Callback::get().window_resize.add_observer(window);
         Callback::get().mouse_move.add_observer(camera);
+
+        window->input_handler.set_camera_ptr(camera);
     }
 
     Renderer::~Renderer() {

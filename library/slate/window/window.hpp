@@ -7,6 +7,7 @@
 
 #include <slate/event/observer.hpp>
 #include <slate/camera/base/camera_base.hpp>
+#include "input/input.hpp"
 
 
 namespace slate {
@@ -17,6 +18,8 @@ namespace slate {
         unsigned int height;
 
     public:
+        InputHandler input_handler;
+        
         Window(unsigned int width_, unsigned int height_, const std::string& name);
         ~Window();
 
