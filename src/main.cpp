@@ -12,11 +12,18 @@ int main()
     slate::Renderer renderer(SCR_WIDTH, SCR_HEIGHT, "Slate");
 
     std::vector<glm::vec3> vertices = {
-        glm::vec3(-0.5f, -0.5f, 0.0f), // left  
-        glm::vec3(0.5f, -0.5f, 0.0f), // right 
-        glm::vec3(0.0f,  0.5f, 0.0f)  // top   
+        glm::vec3(0.5f,  0.5f, 0.0f),  // top right
+        glm::vec3(0.5f, -0.5f, 0.0f),  // bottom right
+        glm::vec3(-0.5f, -0.5f, 0.0f),  // bottom left
+        glm::vec3(-0.5f,  0.5f, 0.0f)   // top left 
     };
-    auto triangle_mesh = std::make_shared<slate::Mesh>(vertices);
+
+    std::vector<unsigned int> indices = { 
+        0, 1, 3,
+        1, 2, 3
+    };
+
+    auto triangle_mesh = std::make_shared<slate::Mesh>(vertices, indices);
 
     slate::Scene scene;
     scene.add_instance("triangle", triangle_mesh);

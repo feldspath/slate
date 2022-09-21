@@ -17,7 +17,7 @@ namespace slate {
         unsigned int n_triangles;
 
     public:
-        Mesh(const std::vector<glm::vec3> vertices);
+        Mesh(const std::vector<glm::vec3> vertices, const std::vector<unsigned int> indices);
         ~Mesh();
 
         void draw();
