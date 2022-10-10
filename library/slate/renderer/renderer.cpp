@@ -17,16 +17,25 @@ namespace slate {
         Callback::get().window_resize.add_observer(window);
         // Callback::get().mouse_move.add_observer(camera);
         // window->input_handler.set_camera_ptr(camera);
+
+        // UBO
+        glGenBuffers(1, &ubo_matrices);
+        glBindBuffer(GL_UNIFORM_BUFFER, ubo_matrices);
+        glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_STATIC_DRAW);
+        glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+        glBindBufferRange(GL_UNIFORM_BUFFER, 0, ubo_matrices, 0, 2 * sizeof(glm::mat4));
     }
 
     Renderer::~Renderer() {
-
+        glDeleteBuffers(1, &ubo_matrices);
     }
 
     void Renderer::load_shaders() {
         std::string default_vs_path = std::string(SLATE_DIR) + std::string("shader/presets/default/default.vs");
         std::string default_fs_path = std::string(SLATE_DIR) + std::string("shader/presets/default/default.fs");
         default_shader = std::make_shared<slate::Shader>(default_vs_path, default_fs_path);
+        default_shader->set_uniform_block("Matrices", 0);
     }
 
     void Renderer::render(Scene scene) {
@@ -36,20 +45,17 @@ namespace slate {
 
         // Clear buffers
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Render
-        default_shader->use();
-        default_shader->set_uniform("view_matrix", view_matrix);
-        default_shader->set_uniform("projection_matrix", projection_matrix);
-        auto instance = scene.slate_object_by_name("triangle");
-        auto render_comp = instance->get_component<MeshRendererComponent>();
-        render_comp->render();
-
-        // for (const auto& instance : scene.get_map()) {
-        //     default_shader->set_uniform("model_matrix", instance.second->get_transform());
-        //     instance.second->draw();
-        // }
+        glBindBuffer(GL_UNIFORM_BUFFER, ubo_matrices);
+        glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &projection_matrix[0][0]);
+        glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), &view_matrix[0][0]);
+        glBindBuffer(GL_UNIFORM_BUFFER, 0);
+        auto render_objects = scene.components_by_type<GraphicComponent>();
+        for (auto& o : render_objects) {
+            o->render();
+        }
     }
 
     void Renderer::begin_frame() {

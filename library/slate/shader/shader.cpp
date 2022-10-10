@@ -23,10 +23,10 @@ namespace slate {
         glCompileShader(vs_id);
 
         check_compile_status(vs_id, "Vertex");
-        
+
         // Fragment Shader Compilation
         unsigned int fs_id;
-        fs_id = glCreateShader(GL_FRAGMENT_SHADER); 
+        fs_id = glCreateShader(GL_FRAGMENT_SHADER);
         glShaderSource(fs_id, 1, &fs_code, NULL);
         glCompileShader(fs_id);
 
@@ -109,4 +109,9 @@ namespace slate {
     void Shader::set_uniform(const std::string& name, const glm::mat4& value) const {
         glUniformMatrix4fv(glGetUniformLocation(program_id, name.c_str()), 1, GL_FALSE, &value[0][0]);
     }
+
+    void Shader::set_uniform_block(const std::string& name, unsigned int block_id) const {
+        glUniformBlockBinding(program_id, glGetUniformBlockIndex(program_id, name.c_str()), block_id);
+    }
+
 }

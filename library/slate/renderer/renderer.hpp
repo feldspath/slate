@@ -21,11 +21,12 @@ namespace slate {
         std::shared_ptr<CameraBase> camera;
 
         ShaderPtr default_shader;
-        glm::mat4 projection;
 
         float fov;
         float near_plane;
         float far_plane;
+
+        unsigned int ubo_matrices;
 
         void load_shaders();
 

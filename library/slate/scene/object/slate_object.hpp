@@ -39,6 +39,6 @@ namespace slate {
                 return t_comp;
             }
         }
-        std::cout << "Error::SlateObject::get_component: no component of type " << typeid(T).name() << " for object " << name << '\n';
+        return nullptr;
     }
 }
