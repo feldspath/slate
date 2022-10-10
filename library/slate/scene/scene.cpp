@@ -1,23 +1,22 @@
-#include <memory>
 #include <iostream>
 
 #include "scene.hpp"
 
 namespace slate {
-    void Scene::add_instance(std::string name, MeshPtr instance, glm::mat4 transform) {
-        instances.insert(std::pair<std::string, InstancePtr>(name, std::make_shared<Instance>(instance, transform)));
+    void Scene::add_slate_object(SlateObjectPtr object) {
+        objects.insert(std::pair<std::string, SlateObjectPtr>(object->get_name(), object));
     }
 
-    InstancePtr Scene::get_instance_by_name(std::string name) {
-        auto instance = instances.find(name);
-        if (instance == instances.end()) {
+    SlateObjectPtr Scene::slate_object_by_name(std::string name) {
+        auto obj = objects.find(name);
+        if (obj == objects.end()) {
             std::cerr << "Error::Scene: instance " << name << " not found in scene\n";
         }
 
-        return instance->second;
+        return obj->second;
     }
 
-    const std::map<std::string, InstancePtr>& Scene::get_instances_map() {
-        return instances;
+    const std::map<std::string, SlateObjectPtr>& Scene::get_map() {
+        return objects;
     }
 }

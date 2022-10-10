@@ -58,7 +58,6 @@ namespace slate {
     void Window::process_input() {
         if (glfwGetKey(id, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(id, true);
-        input_handler.handle_input(id);
     }
 
     void Window::end_frame() {

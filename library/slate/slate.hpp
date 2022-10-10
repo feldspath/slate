@@ -11,5 +11,5 @@
 
 #include "shader/shader.hpp"
 #include "window/window.hpp"
-#include "mesh/mesh.hpp"
+#include "scene/scene.hpp"
 #include "renderer/renderer.hpp"

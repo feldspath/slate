@@ -1,25 +1,19 @@
 #pragma once
 
-#include <vector>
 #include <map>
 #include <string>
+#include <vector>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
-#include "slate/mesh/mesh.hpp"
-#include "slate/instance/instance.hpp"
+#include "object/slate_object.hpp"
 
 namespace slate {
     class Scene {
     private:
-        std::vector<MeshPtr> meshes;
-        std::map<std::string, InstancePtr> instances;
+        std::map<std::string, SlateObjectPtr> objects;
 
     public:
-        void add_instance(std::string name, MeshPtr instance, glm::mat4 transform = glm::mat4(1.0f));
-        InstancePtr get_instance_by_name(std::string name);
-        const std::map<std::string, InstancePtr>& get_instances_map();
+        void add_slate_object(SlateObjectPtr object);
+        SlateObjectPtr slate_object_by_name(std::string name);
+        const std::map<std::string, SlateObjectPtr>& get_map();
     };
 }
