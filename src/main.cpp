@@ -35,7 +35,6 @@ int main()
     // Camera
     slate::CameraPtr camera = std::make_shared<slate::CameraBase>();
     camera->add_component(std::make_shared<slate::FpsInputComponent>());
-    slate::Callback::get().mouse_move.add_observer(std::dynamic_pointer_cast<slate::Observer>(camera->get_component<slate::FpsInputComponent>()));
 
     // Scene
     slate::Scene scene;

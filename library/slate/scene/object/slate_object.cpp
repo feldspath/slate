@@ -1,5 +1,7 @@
 #include "slate_object.hpp"
 
+#include <slate/window/callbacks.hpp>
+
 namespace slate {
     unsigned int SlateObject::object_count = 0;
 
@@ -14,6 +16,8 @@ namespace slate {
     void SlateObject::add_component(ComponentPtr component) {
         components.push_back(component);
         component->set_object(weak_from_this());
+        Callback::get().mouse_move.add_observer(std::dynamic_pointer_cast<Observer>(component));
+        Callback::get().window_resize.add_observer(std::dynamic_pointer_cast<Observer>(component));
     }
 
     void SlateObject::update() {
