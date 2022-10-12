@@ -15,4 +15,10 @@ namespace slate {
         components.push_back(component);
         component->set_object(weak_from_this());
     }
+
+    void SlateObject::update() {
+        for (auto& c : components) {
+            c->update();
+        }
+    }
 }

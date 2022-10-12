@@ -1,6 +1,7 @@
 #include "fps_input_component.hpp"
 
 #include <slate/scene/object/slate_object.hpp>
+#include <slate/input/input.hpp>
 
 #include <iostream>
 
@@ -33,13 +34,22 @@ namespace slate {
         obj->transform.rotation = camera_movement * obj->transform.rotation;
     }
 
-    void FpsInputComponent::move(glm::vec3 direction) {
+    void FpsInputComponent::update() {
         auto obj = target.lock();
         if (!obj) {
             std::cerr << "Error::FpsInputComponent::Move: target expired\n";
             return;
         }
-        obj->transform.position += glm::mat3(obj->transform.frame_matrix()) * direction * speed;
+
+        glm::vec3 direction(0.0f, 0.0f, 0.0f);
+        if (Input::get().key_pressed(GLFW_KEY_W)) direction += obj->transform.front();
+        if (Input::get().key_pressed(GLFW_KEY_S)) direction -= obj->transform.front();
+        if (Input::get().key_pressed(GLFW_KEY_D)) direction += obj->transform.right();
+        if (Input::get().key_pressed(GLFW_KEY_A)) direction -= obj->transform.right();
+        
+        if (glm::dot(direction, direction) < 0.1f) return;
+
+        obj->transform.position += glm::mat3(obj->transform.frame_matrix()) * glm::normalize(direction) * speed;
     }
 
 }

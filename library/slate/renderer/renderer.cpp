@@ -1,22 +1,24 @@
 #include <string>
 #include <iostream>
 
-#include "slate/window/window.hpp"
-#include "slate/helper_dirs.hpp"
-#include "slate/component/graphic/mesh_renderer/mesh_renderer_component.hpp"
+#include <slate/window/window.hpp>
+#include <slate/helper_dirs.hpp>
+#include <slate/component/graphic/mesh_renderer/mesh_renderer_component.hpp>
+#include <slate/window/callbacks.hpp>
+#include <slate/input/input.hpp>
 
 #include "renderer.hpp"
 
-#include "../window/callbacks.hpp"
 
 
 namespace slate {
-    Renderer::Renderer(unsigned int width, unsigned int height, const std::string& name) : window(std::make_shared<Window>(width, height, name.c_str())), camera(std::make_shared<CameraBase>()), fov(100.0f), near_plane(0.1f), far_plane(100.0f) {
+    Renderer::Renderer(unsigned int width, unsigned int height, const std::string& name) : window(std::make_shared<Window>(width, height, name.c_str())), fov(100.0f), near_plane(0.1f), far_plane(100.0f) {
         load_shaders();
-        // window->disable_cursor();
+        window->disable_cursor();
         Callback::get().window_resize.add_observer(window);
         // Callback::get().mouse_move.add_observer(camera);
-        // window->input_handler.set_camera_ptr(camera);
+
+        Input::get().set_window(window);
 
         // UBO
         glGenBuffers(1, &ubo_matrices);
@@ -38,7 +40,7 @@ namespace slate {
         default_shader->set_uniform_block("Matrices", 0);
     }
 
-    void Renderer::render(Scene scene) {
+    void Renderer::render(const Scene& scene, const CameraPtr camera) {
         // Matrices
         const glm::mat4 view_matrix = camera->view_matrix();
         const glm::mat4 projection_matrix = glm::perspective(glm::radians(fov), (float)window->get_width() / (float)window->get_height(), near_plane, far_plane);

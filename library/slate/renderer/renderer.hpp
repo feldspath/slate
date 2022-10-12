@@ -18,7 +18,6 @@ namespace slate {
     class Renderer {
     private:
         std::shared_ptr<Window> window;
-        std::shared_ptr<CameraBase> camera;
 
         ShaderPtr default_shader;
 
@@ -34,7 +33,7 @@ namespace slate {
         Renderer(unsigned int width, unsigned int height, const std::string& name);
         ~Renderer();
 
-        void render(Scene scene);
+        void render(const Scene& scene, const CameraPtr camera);
         void begin_frame();
         void end_frame();
         bool should_continue() const;

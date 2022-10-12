@@ -19,4 +19,10 @@ namespace slate {
     const std::map<std::string, SlateObjectPtr>& Scene::get_map() {
         return objects;
     }
+
+    void Scene::update() {
+        for (auto& o : objects) {
+            o.second->update();
+        }
+    }
 }

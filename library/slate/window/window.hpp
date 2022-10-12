@@ -20,6 +20,7 @@ namespace slate {
         ~Window();
 
         void process_input();
+        bool key_pressed(unsigned int key) const;
         void end_frame();
         bool should_close() const;
 

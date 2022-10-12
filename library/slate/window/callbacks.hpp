@@ -12,5 +12,8 @@ namespace slate {
         Subject mouse_move;
 
         static Callback& get();
+
+    private:
+        Callback() {}
     };
 }

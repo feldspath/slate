@@ -6,7 +6,7 @@
 
 
 namespace slate {
-    static void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+    static void framebuffer_size_callback(GLFWwindow*, int width, int height) {
         Event e;
         e.type = EventType::WINDOW_RESIZE;
         e.add_integer_arg("width", width);
@@ -14,7 +14,7 @@ namespace slate {
         Callback::get().window_resize.notify(e);
     }
 
-    static void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+    static void mouse_callback(GLFWwindow*, double xpos, double ypos) {
         Event e;
         e.type = EventType::MOUSE_MOVE;
         e.add_float_arg("mouse_x", static_cast<float>(xpos));
@@ -56,8 +56,12 @@ namespace slate {
     }
 
     void Window::process_input() {
-        if (glfwGetKey(id, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        if (key_pressed(GLFW_KEY_ESCAPE))
             glfwSetWindowShouldClose(id, true);
+    }
+
+    bool Window::key_pressed(unsigned int key) const {
+        return (glfwGetKey(id, key) == GLFW_PRESS);
     }
 
     void Window::end_frame() {
