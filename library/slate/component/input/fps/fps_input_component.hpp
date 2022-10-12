@@ -8,11 +8,11 @@
 #include <glm/gtc/type_ptr.hpp>
 
 namespace slate {
-    class FpsInputComponent : public InputComponent, public Observer {
+    class FpsInputComponent : public InputComponent {
     private:
         float mouse_last_x;
         float mouse_last_y;
-        bool first_mouse = false;    
+        bool first_mouse = false;
 
     public:
         float sensitivity = 0.001f;

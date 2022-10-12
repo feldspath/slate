@@ -5,8 +5,8 @@ namespace slate {
     MeshRendererComponent::MeshRendererComponent(MeshPtr mesh_, ShaderPtr shader_) : mesh(mesh_), shader(shader_) {}
 
     void MeshRendererComponent::render() {
-        auto obj = target.lock();
-        if (!obj) std::cout << "Error::MeshRenderComponent::Render: expired pointer\n";
+        auto obj = target();
+        if (!obj)  return;
 
         shader->use();
         const glm::mat4 model_matrix = obj->transform.frame_matrix();

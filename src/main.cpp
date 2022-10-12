@@ -2,6 +2,8 @@
 #include <slate/component/graphic/mesh_renderer/mesh_renderer_component.hpp>
 #include <slate/scene/camera/base/camera_base.hpp>
 #include <slate/component/input/fps/fps_input_component.hpp>
+#include <slate/window/callbacks.hpp>
+#include <slate/event/observer.hpp>
 
 #include <iostream>
 #include <vector>
@@ -33,6 +35,7 @@ int main()
     // Camera
     slate::CameraPtr camera = std::make_shared<slate::CameraBase>();
     camera->add_component(std::make_shared<slate::FpsInputComponent>());
+    slate::Callback::get().mouse_move.add_observer(std::dynamic_pointer_cast<slate::Observer>(camera->get_component<slate::FpsInputComponent>()));
 
     // Scene
     slate::Scene scene;
@@ -46,7 +49,7 @@ int main()
     while (renderer.should_continue()) {
         scene.update();
         renderer.begin_frame();
-        triangle_instance->transform.position = glm::vec3(0.0f, 0.0f, -3.0f - 2.0f * std::cos(glfwGetTime()));
+        triangle_instance->transform.position = glm::vec3(0.0f, 0.0f, -3.0f - 2.0f * std::cos(0.0f));
         renderer.render(scene, camera);
         renderer.end_frame();
     }

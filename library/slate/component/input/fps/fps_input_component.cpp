@@ -22,24 +22,18 @@ namespace slate {
             return;
         }
 
-        auto obj = target.lock();
-        if (!obj) {
-            std::cerr << "Error::FpsInputComponent::Move: target expired\n";
-            return;
-        }
+        auto obj = target();
+        if (!obj) return;
 
-        auto camera_movement = glm::angleAxis(mouse_offset.x * sensitivity, glm::vec3(0.0f, 1.0f, 0.0f));
-        camera_movement *= glm::angleAxis(mouse_offset.y * sensitivity, obj->transform.right());
+        auto camera_movement = glm::angleAxis(-mouse_offset.x * sensitivity, glm::vec3(0.0f, 1.0f, 0.0f));
+        camera_movement *= glm::angleAxis(-mouse_offset.y * sensitivity, obj->transform.right());
 
         obj->transform.rotation = camera_movement * obj->transform.rotation;
     }
 
     void FpsInputComponent::update() {
-        auto obj = target.lock();
-        if (!obj) {
-            std::cerr << "Error::FpsInputComponent::Move: target expired\n";
-            return;
-        }
+        auto obj = target();
+        if (!obj) return;
 
         glm::vec3 direction(0.0f, 0.0f, 0.0f);
         if (Input::get().key_pressed(GLFW_KEY_W)) direction += obj->transform.front();
@@ -49,7 +43,7 @@ namespace slate {
         
         if (glm::dot(direction, direction) < 0.1f) return;
 
-        obj->transform.position += glm::mat3(obj->transform.frame_matrix()) * glm::normalize(direction) * speed;
+        obj->transform.position += glm::normalize(direction) * speed;
     }
 
 }

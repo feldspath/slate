@@ -1,34 +1,20 @@
 #pragma once
 
+#include <slate/event/observer.hpp>
 #include <memory>
 
 namespace slate {
-    // class ComponentInfo {
-    // private:
-    //     template <typename T>
-    //     struct registered {
-    //         static const unsigned int index;
-    //     };
-        
-    //     template <typename T>
-    //     static inline unsigned int get_index() {
-    //         return registered<T>::index;
-    //     }
-    // };
-
-    
-    // template <typename T>
-    // const unsigned int ComponentInfo::registered<T>::index = ComponentInfo::add_type(1);
-
     class SlateObject;
 
-    class Component {
-    protected:
-        std::weak_ptr<SlateObject> target;
+    class Component : public Observer {
+    private:
+        std::weak_ptr<SlateObject> target_ptr;
 
     public:
         virtual void update() = 0;
         void set_object(std::weak_ptr<SlateObject> target);
+        std::shared_ptr<SlateObject> target();
+        virtual void on_notify(Event) {}
     };
 
     using ComponentPtr = std::shared_ptr<Component>;

@@ -6,9 +6,9 @@ namespace slate {
 
     glm::mat4 Transform::frame_matrix() const {
         // TODO: scale
-        auto frame = glm::toMat4(rotation);
-        frame = glm::translate(frame, position);
-        return frame;
+        auto trans = glm::translate(glm::mat4(1.0f), position);
+        auto rot = glm::toMat4(rotation);
+        return trans * rot;
     }
 
     glm::vec3 Transform::front() const {
