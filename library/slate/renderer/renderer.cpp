@@ -16,16 +16,16 @@ namespace slate {
         load_shaders();
         window->disable_cursor();
         Callback::get().window_resize.add_observer(window);
-
         Input::get().set_window(window);
+        glEnable(GL_DEPTH_TEST);
 
         // UBO
         glGenBuffers(1, &ubo_matrices);
         glBindBuffer(GL_UNIFORM_BUFFER, ubo_matrices);
-        glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_STATIC_DRAW);
+        glBufferData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::mat4), NULL, GL_STATIC_DRAW);
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-        glBindBufferRange(GL_UNIFORM_BUFFER, 0, ubo_matrices, 0, 2 * sizeof(glm::mat4));
+        glBindBufferRange(GL_UNIFORM_BUFFER, 0, ubo_matrices, 0, 3 * sizeof(glm::mat4));
     }
 
     Renderer::~Renderer() {
@@ -42,16 +42,31 @@ namespace slate {
     void Renderer::render(const Scene& scene, const CameraPtr camera) {
         // Matrices
         const glm::mat4 view_matrix = camera->view_matrix();
+        const glm::mat4 view_matrix_inv = glm::inverse(view_matrix);
         const glm::mat4 projection_matrix = glm::perspective(glm::radians(fov), (float)window->get_width() / (float)window->get_height(), near_plane, far_plane);
 
         // Clear buffers
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        // Lights
+        unsigned int light_count = 0;
+        default_shader->use();
+        for (auto& light : scene.get_lights()) {
+            if (light->get_type() == LightType::POINT) {
+                default_shader->set_uniform("lights[" + std::to_string(light_count) + "].position", light->transform.position);
+                default_shader->set_uniform("lights[" + std::to_string(light_count) + "].color", light->color);
+                default_shader->set_uniform("lights[" + std::to_string(light_count) + "].power", light->power);
+                ++light_count;
+            }
+        }
+        default_shader->set_uniform("light_count", light_count);
+
         // Render
         glBindBuffer(GL_UNIFORM_BUFFER, ubo_matrices);
         glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &projection_matrix[0][0]);
         glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), &view_matrix[0][0]);
+        glBufferSubData(GL_UNIFORM_BUFFER, 2*sizeof(glm::mat4), sizeof(glm::mat4), &view_matrix_inv[0][0]);
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
         auto render_objects = scene.components_by_type<GraphicComponent>();
         for (auto& o : render_objects) {

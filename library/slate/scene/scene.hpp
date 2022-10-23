@@ -6,20 +6,28 @@
 #include <memory>
 
 #include "object/slate_object.hpp"
+#include "light/light_base.hpp"
 
 namespace slate {
     class Scene {
     private:
         std::map<std::string, SlateObjectPtr> objects;
+        std::vector<std::shared_ptr<Light>> lights;
 
     public:
-        void add_slate_object(SlateObjectPtr object);
+        void add(SlateObjectPtr object);
+        void add(std::shared_ptr<Light> light);
+
         SlateObjectPtr slate_object_by_name(std::string name);
+
         const std::map<std::string, SlateObjectPtr>& get_map();
+        const std::vector<std::shared_ptr<Light>>& get_lights() const;
+
         void update();
 
         template <typename T>
         std::vector<std::shared_ptr<T>> components_by_type() const;
+
     };
 
     template <typename T>

@@ -17,10 +17,15 @@ if(UNIX)
     include_directories(${GLFW_INCLUDE_DIRS})
 endif()
 
-# Include GLFW precompiled lib for Windows/Visual Studio
+# Include GLFW and Assimp precompiled lib for Windows/Visual Studio
 if(MSVC)
     set(GLFW_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/glfw/include")
     include_directories(${GLFW_INCLUDE_DIRS})
     set(GLFW_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/glfw/lib/glfw3.lib")
+
+    set(ASSIMP_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/assimp/include")
+    include_directories(${ASSIMP_INCLUDE_DIRS})
+    set(ASSIMP_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/assimp/lib/assimp-vc143-mt.lib")
+    set(ASSIMP_DLL "${CMAKE_CURRENT_LIST_DIR}/assimp/lib/assimp-vc143-mt.dll")
 endif()
 

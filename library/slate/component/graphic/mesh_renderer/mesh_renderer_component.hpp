@@ -1,17 +1,17 @@
 #pragma once
 
 #include "../graphic_component.hpp"
-#include <slate/scene/mesh/mesh.hpp>
+#include <slate/scene/model/model.hpp>
 #include <slate/shader/shader.hpp>
 
 namespace slate {
     class MeshRendererComponent : public GraphicComponent {
     private:
-        MeshPtr mesh;
+        ModelPtr model;
         ShaderPtr shader;
     
     public:
-        MeshRendererComponent(MeshPtr mesh_, ShaderPtr shader_ = nullptr);
+        MeshRendererComponent(ModelPtr mesh_, ShaderPtr shader_ = nullptr);
         
         void render() override;
         void update() override {}

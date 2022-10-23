@@ -9,8 +9,7 @@
 
 
 namespace slate {
-    Mesh::Mesh(const std::vector<glm::vec3> vertices, const std::vector<unsigned int> indices) {
-        n_vertices = vertices.size();
+    Mesh::Mesh(const std::vector<Vertex> vertices_, const std::vector<unsigned int> indices_, const std::weak_ptr<Material> material_) : vertices(vertices_), indices(indices_), material(material_) {
         unsigned int n_indices = indices.size();
         n_triangles = n_indices / 3;
 
@@ -25,13 +24,19 @@ namespace slate {
         glBindVertexArray(vao);
 
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, n_vertices * sizeof(glm::vec3), vertices.data(), GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, n_indices * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
         glEnableVertexAttribArray(0);
+
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
+        glEnableVertexAttribArray(1);
+        
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
+        glEnableVertexAttribArray(2);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0); 
@@ -43,7 +48,17 @@ namespace slate {
         glDeleteBuffers(1, &vbo);
     }
 
-    void Mesh::draw() {
+    void Mesh::draw(const ShaderPtr shader) const {
+        // assume the shader is already used, we only pass the shader for uniforms
+        auto mat = material.lock();
+        if (!mat) {
+            std::cerr << "Error::Mesh::Draw: material has expired\n";
+        }
+
+        shader->set_uniform("diffuse", mat->diffuse);
+        shader->set_uniform("ambient", mat->ambient);
+        shader->set_uniform("specular", mat->specular);
+
         glBindVertexArray(vao);
         glDrawElements(GL_TRIANGLES, n_triangles * 3, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);

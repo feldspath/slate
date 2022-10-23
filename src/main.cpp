@@ -2,8 +2,8 @@
 #include <slate/component/graphic/mesh_renderer/mesh_renderer_component.hpp>
 #include <slate/scene/camera/base/camera_base.hpp>
 #include <slate/component/input/fps/fps_input_component.hpp>
-#include <slate/window/callbacks.hpp>
-#include <slate/event/observer.hpp>
+#include <slate/scene/light/point/point_light.hpp>
+#include <slate/scene/light/light_base.hpp>
 
 #include <iostream>
 #include <vector>
@@ -16,39 +16,30 @@ int main()
 {
     slate::Renderer renderer(SCR_WIDTH, SCR_HEIGHT, "Slate");
 
-    // Triangle
-    std::vector<glm::vec3> vertices = {
-        glm::vec3(0.5f,  0.5f, 0.0f),  // top right
-        glm::vec3(0.5f, -0.5f, 0.0f),  // bottom right
-        glm::vec3(-0.5f, -0.5f, 0.0f),  // bottom left
-        glm::vec3(-0.5f,  0.5f, 0.0f)   // top left 
-    };
-
-    std::vector<unsigned int> indices = { 
-        0, 1, 3,
-        1, 2, 3
-    };
-
-    auto triangle = std::make_shared<slate::SlateObject>("triangle");
-    triangle->add_component(std::make_shared<slate::MeshRendererComponent>(std::make_shared<slate::Mesh>(vertices, indices), renderer.get_default_shader()));
+    // Object
+    slate::ModelPtr model = std::make_shared<slate::Model>(std::string(ROOT_DIR) + std::string("resources/test/test.obj"));
+    slate::SlateObjectPtr obj = std::make_shared<slate::SlateObject>("cube");
+    obj->add_component(std::make_shared<slate::MeshRendererComponent>(model, renderer.get_default_shader()));
 
     // Camera
     slate::CameraPtr camera = std::make_shared<slate::CameraBase>();
     camera->add_component(std::make_shared<slate::FpsInputComponent>());
 
+    // Light
+    slate::LightPtr light = std::make_shared<slate::PointLight>();
+    light->transform.position = glm::vec3(3.0f, 2.0f, 2.0f);
+
     // Scene
     slate::Scene scene;
-    scene.add_slate_object(triangle);
-    scene.add_slate_object(camera);
-
-    auto triangle_instance = scene.slate_object_by_name("triangle");
+    scene.add(camera);
+    scene.add(obj);
+    scene.add(light);
 
     // render loop
     // -----------
     while (renderer.should_continue()) {
         scene.update();
         renderer.begin_frame();
-        triangle_instance->transform.position = glm::vec3(0.0f, 0.0f, -3.0f - 2.0f * std::cos(0.0f));
         renderer.render(scene, camera);
         renderer.end_frame();
     }
