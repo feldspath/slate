@@ -33,6 +33,8 @@ namespace slate {
         Renderer(unsigned int width, unsigned int height, const std::string& name);
         ~Renderer();
 
+        glm::vec3 clear_color = glm::vec3(0.0f);
+
         void render(const Scene& scene, const CameraPtr camera);
         void begin_frame();
         void end_frame();

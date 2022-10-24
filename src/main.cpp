@@ -35,6 +35,9 @@ int main()
     scene.add(obj);
     scene.add(light);
 
+    light->power = 40.0f;
+    renderer.clear_color = glm::vec3(0.02f, 0.02f, 0.03f);
+
     // render loop
     // -----------
     while (renderer.should_continue()) {

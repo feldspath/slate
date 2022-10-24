@@ -17,6 +17,8 @@ namespace slate {
     public:
         void add(SlateObjectPtr object);
         void add(std::shared_ptr<Light> light);
+        void rename_object(const std::string& old_name, const std::string& new_name);
+        void rename_object(SlateObjectPtr object, const std::string& new_name);
 
         SlateObjectPtr slate_object_by_name(std::string name);
 

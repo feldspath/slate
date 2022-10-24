@@ -24,6 +24,8 @@ include("library/CMakeLists.txt")
 #  @src_files_slate: all files of the slate library
 #  @src_files_external: all third party libraries compiled with the project
 add_executable(${executable_name} ${src_files_slate} ${src_files_external} ${src_files})
+set_property(TARGET ${executable_name} PROPERTY CXX_STANDARD 17)
+
 
 # Set Compiler for Unix system
 if(UNIX)
