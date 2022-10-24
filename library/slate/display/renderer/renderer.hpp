@@ -28,17 +28,17 @@ namespace slate {
         unsigned int ubo_matrices;
 
         void load_shaders();
+        void render(const Scene& scene, const CameraPtr camera);
+        void begin_frame();
+        void end_frame();
+        bool should_continue() const;
 
     public:
         Renderer(unsigned int width, unsigned int height, const std::string& name);
         ~Renderer();
 
+        void run(Scene& scene);
         glm::vec3 clear_color = glm::vec3(0.0f);
-
-        void render(const Scene& scene, const CameraPtr camera);
-        void begin_frame();
-        void end_frame();
-        bool should_continue() const;
         ShaderPtr get_default_shader();
     };
 }

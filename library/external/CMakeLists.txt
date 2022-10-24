@@ -11,12 +11,12 @@ include_directories("${CMAKE_CURRENT_LIST_DIR}/glad/include/")
 # Include GLFW and Assimp lib for Unix
 if(UNIX)
     #expect GLFW3 already installed on the system
-    find_package(glfw3 REQUIRED) 
+    find_package(glfw3 REQUIRED)
     find_package(PkgConfig REQUIRED)
     pkg_search_module(GLFW REQUIRED glfw3)
     include_directories(${GLFW_INCLUDE_DIRS})
     
-    find_package(ASSIMP REQUIRED)
+    find_package(assimp REQUIRED)
 endif()
 
 # Include GLFW and Assimp precompiled lib for Windows/Visual Studio

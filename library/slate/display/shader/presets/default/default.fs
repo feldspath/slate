@@ -17,7 +17,7 @@ struct PointLight {
     float power;
 };
 
-uniform PointLight lights[16];
+uniform PointLight lights[32];
 uniform int light_count = 0;
 
 uniform vec3 diffuse;

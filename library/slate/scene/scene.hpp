@@ -7,6 +7,7 @@
 
 #include "object/slate_object.hpp"
 #include "light/light_base.hpp"
+#include "camera/camera_base.hpp"
 
 namespace slate {
     class Scene {
@@ -14,9 +15,12 @@ namespace slate {
         std::map<std::string, SlateObjectPtr> objects;
         std::vector<std::shared_ptr<Light>> lights;
 
+        CameraPtr camera;
+
     public:
         void add(SlateObjectPtr object);
         void add(std::shared_ptr<Light> light);
+        void add(CameraPtr camera);
         void rename_object(const std::string& old_name, const std::string& new_name);
         void rename_object(SlateObjectPtr object, const std::string& new_name);
 
@@ -24,6 +28,7 @@ namespace slate {
 
         const std::map<std::string, SlateObjectPtr>& get_map();
         const std::vector<std::shared_ptr<Light>>& get_lights() const;
+        const CameraPtr get_camera() const;
 
         void update();
 

@@ -31,6 +31,20 @@ namespace slate {
         glDeleteBuffers(1, &ubo_matrices);
     }
 
+    void Renderer::run(Scene& scene) {
+        auto& camera = scene.get_camera();
+        if (!camera) {
+            std::cerr << "Error::Renderer::run: the scene camera is not set\n";
+            return;
+        }
+        while (should_continue()) {
+            scene.update();
+            begin_frame();
+            render(scene, scene.get_camera());
+            end_frame();
+        }
+    }
+
     void Renderer::load_shaders() {
         std::string default_vs_path = std::string(SLATE_DIR) + std::string("display/shader/presets/default/default.vs");
         std::string default_fs_path = std::string(SLATE_DIR) + std::string("display/shader/presets/default/default.fs");
@@ -58,6 +72,7 @@ namespace slate {
                 default_shader->set_uniform("lights[" + std::to_string(light_count) + "].power", light->power);
                 ++light_count;
             }
+            if (light_count == 32) break;
         }
         default_shader->set_uniform("light_count", light_count);
 
@@ -88,6 +103,4 @@ namespace slate {
     ShaderPtr Renderer::get_default_shader() {
         return default_shader;
     }
-
-
 }

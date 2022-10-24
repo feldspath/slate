@@ -17,6 +17,19 @@ namespace slate {
         add(std::dynamic_pointer_cast<SlateObject>(light));
     }
 
+    void Scene::add(CameraPtr camera) {
+        this->camera = camera;
+        add(std::dynamic_pointer_cast<SlateObject>(camera));
+    }
+
+    const CameraPtr Scene::get_camera() const {
+        if (!camera) {
+            std::cerr << "Error::Scene::get_camera: the scene camera is not set\n";
+            return nullptr;
+        }
+        return camera;
+    }
+
     void Scene::rename_object(const std::string& old_name, const std::string& new_name) {
         auto obj = slate_object_by_name(old_name);
         if (!obj) return;

@@ -14,7 +14,7 @@ int main()
     slate::Renderer renderer(SCR_WIDTH, SCR_HEIGHT, "Slate");
 
     // Object
-    slate::ModelPtr model = std::make_shared<slate::Model>(std::string(ROOT_DIR) + std::string("resources/test/test.obj"));
+    slate::ModelPtr model = std::make_shared<slate::Model>(std::string(ROOT_DIR) + "resources/test/test.obj");
     slate::SlateObjectPtr obj = std::make_shared<slate::SlateObject>("cube");
     obj->add_component(std::make_shared<slate::MeshRendererComponent>(model, renderer.get_default_shader()));
     obj->add_component(std::make_shared<Scaling>());
@@ -33,19 +33,14 @@ int main()
     scene.add(obj);
     scene.add(light);
 
+    // Setting some parameters
     light->power = 40.0f;
     renderer.clear_color = glm::vec3(0.02f, 0.02f, 0.03f);
-
     obj->transform.position = glm::vec3(0.0f, 0.0f, -2.0f);
 
     // render loop
-    // no script should go there, everything should be executed via components
-    while (renderer.should_continue()) {
-        scene.update();
-        renderer.begin_frame();
-        renderer.render(scene, camera);
-        renderer.end_frame();
-    }
+    renderer.run(scene);
+
 
     return 0;
 }
