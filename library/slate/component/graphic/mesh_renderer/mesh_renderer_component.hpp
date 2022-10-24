@@ -2,7 +2,7 @@
 
 #include "../graphic_component.hpp"
 #include <slate/scene/model/model.hpp>
-#include <slate/shader/shader.hpp>
+#include <slate/display/shader/shader.hpp>
 
 namespace slate {
     class MeshRendererComponent : public GraphicComponent {

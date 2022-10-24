@@ -1,12 +1,9 @@
 #include <slate/slate.hpp>
-#include <slate/component/graphic/mesh_renderer/mesh_renderer_component.hpp>
-#include <slate/scene/camera/base/camera_base.hpp>
-#include <slate/component/input/fps/fps_input_component.hpp>
-#include <slate/scene/light/point/point_light.hpp>
-#include <slate/scene/light/light_base.hpp>
 
 #include <iostream>
 #include <vector>
+
+#include "scaling.hpp"
 
 // settings
 const unsigned int SCR_WIDTH = 800;
@@ -20,9 +17,10 @@ int main()
     slate::ModelPtr model = std::make_shared<slate::Model>(std::string(ROOT_DIR) + std::string("resources/test/test.obj"));
     slate::SlateObjectPtr obj = std::make_shared<slate::SlateObject>("cube");
     obj->add_component(std::make_shared<slate::MeshRendererComponent>(model, renderer.get_default_shader()));
+    obj->add_component(std::make_shared<Scaling>());
 
     // Camera
-    slate::CameraPtr camera = std::make_shared<slate::CameraBase>();
+    slate::CameraPtr camera = std::make_shared<slate::Camera>();
     camera->add_component(std::make_shared<slate::FpsInputComponent>());
 
     // Light
@@ -38,8 +36,10 @@ int main()
     light->power = 40.0f;
     renderer.clear_color = glm::vec3(0.02f, 0.02f, 0.03f);
 
+    obj->transform.position = glm::vec3(0.0f, 0.0f, -2.0f);
+
     // render loop
-    // -----------
+    // no script should go there, everything should be executed via components
     while (renderer.should_continue()) {
         scene.update();
         renderer.begin_frame();

@@ -22,7 +22,7 @@ namespace slate {
             return;
         }
 
-        auto obj = target();
+        auto obj = get_target();
         if (!obj) return;
 
         auto camera_movement = glm::angleAxis(-mouse_offset.x * sensitivity, glm::vec3(0.0f, 1.0f, 0.0f));
@@ -32,7 +32,7 @@ namespace slate {
     }
 
     void FpsInputComponent::update() {
-        auto obj = target();
+        auto obj = get_target();
         if (!obj) return;
 
         glm::vec3 direction(0.0f, 0.0f, 0.0f);

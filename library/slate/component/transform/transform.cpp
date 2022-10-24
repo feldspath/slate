@@ -2,13 +2,13 @@
 
 namespace slate {
 
-    Transform::Transform() : position(0.0f), rotation(1.0f, 0.0f, 0.0f, 0.0f), scale(0.0f) {}
+    Transform::Transform() : position(0.0f), rotation(1.0f, 0.0f, 0.0f, 0.0f), scale(1.0f) {}
 
     glm::mat4 Transform::frame_matrix() const {
-        // TODO: scale
+        auto scl = glm::scale(glm::mat4(1.0f), scale);
         auto trans = glm::translate(glm::mat4(1.0f), position);
         auto rot = glm::toMat4(rotation);
-        return trans * rot;
+        return trans * rot * scl;
     }
 
     glm::vec3 Transform::front() const {

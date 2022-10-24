@@ -7,11 +7,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "slate/scene/mesh/mesh.hpp"
-#include "slate/shader/shader.hpp"
-#include "slate/window/window.hpp"
-#include "slate/scene/scene.hpp"
-#include "slate/scene/camera/base/camera_base.hpp"
+#include <slate/scene/mesh/mesh.hpp>
+#include <slate/scene/camera/camera_base.hpp>
+#include <slate/scene/scene.hpp>
+#include "../shader/shader.hpp"
+#include "../window/window.hpp"
 
 
 namespace slate {

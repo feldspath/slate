@@ -1,11 +1,10 @@
 #include <string>
 #include <iostream>
 
-#include <slate/window/window.hpp>
 #include <slate/helper_dirs.hpp>
 #include <slate/component/graphic/mesh_renderer/mesh_renderer_component.hpp>
-#include <slate/window/callbacks.hpp>
 #include <slate/input/input.hpp>
+#include "../window/callbacks.hpp"
 
 #include "renderer.hpp"
 
@@ -33,8 +32,8 @@ namespace slate {
     }
 
     void Renderer::load_shaders() {
-        std::string default_vs_path = std::string(SLATE_DIR) + std::string("shader/presets/default/default.vs");
-        std::string default_fs_path = std::string(SLATE_DIR) + std::string("shader/presets/default/default.fs");
+        std::string default_vs_path = std::string(SLATE_DIR) + std::string("display/shader/presets/default/default.vs");
+        std::string default_fs_path = std::string(SLATE_DIR) + std::string("display/shader/presets/default/default.fs");
         default_shader = std::make_shared<slate::Shader>(default_vs_path, default_fs_path);
         default_shader->set_uniform_block("Matrices", 0);
     }

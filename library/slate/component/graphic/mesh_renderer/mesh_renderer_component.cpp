@@ -5,7 +5,7 @@ namespace slate {
     MeshRendererComponent::MeshRendererComponent(ModelPtr mesh_, ShaderPtr shader_) : model(mesh_), shader(shader_) {}
 
     void MeshRendererComponent::render() {
-        auto obj = target();
+        auto obj = get_target();
         if (!obj)  return;
 
         shader->use();

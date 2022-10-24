@@ -12,8 +12,8 @@ namespace slate {
 
     public:
         virtual void update() = 0;
-        void set_object(std::weak_ptr<SlateObject> target);
-        std::shared_ptr<SlateObject> target();
+        void set_object(std::weak_ptr<SlateObject> get_target);
+        std::shared_ptr<SlateObject> get_target();
         virtual void on_notify(Event) {}
     };
 

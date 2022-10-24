@@ -1,9 +1,9 @@
 #include "camera_base.hpp"
 
 namespace slate {
-    CameraBase::CameraBase() {}
+    Camera::Camera() {}
 
-    glm::mat4 CameraBase::view_matrix() const {
+    glm::mat4 Camera::view_matrix() const {
         return glm::inverse(transform.frame_matrix());
     }
 }

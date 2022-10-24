@@ -3,8 +3,8 @@
 #include <memory>
 #include <vector>
 
-#include <slate/glad/glad.hpp>
-#include <slate/shader/shader.hpp>
+#include <slate/display/glad/glad.hpp>
+#include <slate/display/shader/shader.hpp>
 #include "../material/material.hpp"
 
 #include <glm/glm.hpp>

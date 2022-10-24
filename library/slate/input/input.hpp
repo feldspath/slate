@@ -1,5 +1,5 @@
 #include <memory>
-#include <slate/window/window.hpp>
+#include <slate/display/window/window.hpp>
 
 namespace slate {
 

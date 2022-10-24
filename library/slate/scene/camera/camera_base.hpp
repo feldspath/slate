@@ -9,11 +9,11 @@
 #include <memory>
 
 namespace slate {
-    class CameraBase : public SlateObject {
+    class Camera : public SlateObject {
     public:
-        CameraBase();
+        Camera();
         glm::mat4 view_matrix() const;
     };
 
-    using CameraPtr = std::shared_ptr<CameraBase>;
+    using CameraPtr = std::shared_ptr<Camera>;
 }

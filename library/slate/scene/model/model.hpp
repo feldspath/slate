@@ -2,7 +2,7 @@
 
 #include "../mesh/mesh.hpp"
 #include "../material/material.hpp"
-#include <slate/shader/shader.hpp>
+#include <slate/display/shader/shader.hpp>
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
