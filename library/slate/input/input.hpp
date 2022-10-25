@@ -5,12 +5,12 @@ namespace slate {
 
     class Input {
     private:
-        std::shared_ptr<Window> window;
+        std::weak_ptr<Window> window;
         Input() {}
 
     public:
         static Input& get();
         bool key_pressed(unsigned int key) const;
-        void set_window(std::shared_ptr<Window> window);
+        void set_window(std::weak_ptr<Window> window);
     };
 }

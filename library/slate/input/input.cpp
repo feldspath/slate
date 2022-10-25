@@ -9,13 +9,14 @@ namespace slate {
     }
     
     bool Input::key_pressed(unsigned int key) const {
-        if (!window) {
-            std::cout << "Error::Input::key_pressed: window not set\n";
+        auto w = window.lock();
+        if (!w) {
+            std::cout << "Error::Input::key_pressed: window not set or expired\n";
         }
-        return window->key_pressed(key);
+        return w->key_pressed(key);
     }
 
-    void Input::set_window(std::shared_ptr<Window> window) {
+    void Input::set_window(std::weak_ptr<Window> window) {
         this->window = window;
     }
 
