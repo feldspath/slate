@@ -1,6 +1,6 @@
 # Slate
 
-Slate is a lightweight OpenGL engine which aims at providing basic support for scripting and rendering. It works on Linux and Windows only, as OpenGL is now deprecated for MacOS.
+Slate is a lightweight OpenGL engine which aims at providing basic support for scripting and rendering. It works on Linux and Windows only, as OpenGL is now deprecated for macOS.
 
 ## Download
 
@@ -49,7 +49,7 @@ and run using the project name, by default:
 
 ### Windows
 
-The required libraries are pre-compiled and nothing has to be installed, you only need to install [CMake](https://cmake.org/download/). Use it to setup the project, either with the GUI, or using the following commands inside the repository:
+The required libraries are pre-compiled and nothing has to be installed, you only need to install [CMake](https://cmake.org/download/). Use it to set up the project, either with the GUI, or using the following commands inside the repository:
 
 ```
 mkdir build
@@ -67,13 +67,13 @@ Math is handled using the GLM library. The manual can be found [here](https://gi
 
 ### Slate Object
 
-Every object used in a scene is a `SlateObject`. They should not be specified with subclasses, but components should be added to them in order to specify their behaviour. Each component has to be created via `std::make_shared`. For example:
+Every object used in a scene is a `SlateObject`. They should not be specified with subclasses, but components should be added to them in order to specify their behavior. Each component has to be created via `std::make_shared`. For example:
 
 ```cpp
 camera->add_component(std::make_shared<slate::FpsInputComponent>());
 ```
 
-`void SlateObject::update()` may be overridden to define the behaviour of a component. Finally, always create `SlateObjectPtr` and not `SlateObject`, it is required to add them to the scene.
+`void SlateObject::update()` may be overridden to define the behavior of a component. Finally, always create `SlateObjectPtr` and not `SlateObject`, it is required to add them to the scene.
 
 
 ### Scene
@@ -102,7 +102,7 @@ scene.add(obj);
 
 ### Camera
 
-A `Camera` is a `SlateObject` so components can be assigned to it. Be sure to add a camera to the scene before running the renderer.
+A `Camera` is a `SlateObject`, so components can be assigned to it. Be sure to add a camera to the scene before running the renderer.
 
 ### Light
 
@@ -142,7 +142,7 @@ Input::get().key_pressed(GLFW_KEY_W);
 
 Refer to [GLFW Keyboard keys](https://www.glfw.org/docs/3.3/group__keys.html) for a complete list.  
 
-Mouse input is implemented via an subject/observer pattern, the `on_notify` callback function has to be overridden:
+Mouse input is implemented via a subject/observer pattern, the `on_notify` callback function has to be overridden:
 
 ```cpp
 void FpsInputComponent::on_notify(Event event) {
