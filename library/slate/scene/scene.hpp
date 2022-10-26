@@ -30,7 +30,7 @@ namespace slate {
         const std::vector<std::shared_ptr<Light>>& get_lights() const;
         const CameraPtr get_camera() const;
 
-        void update();
+        void update(const float dt);
 
         template <typename T>
         std::vector<std::shared_ptr<T>> components_by_type() const;

@@ -17,6 +17,6 @@ namespace slate {
         float sensitivity = 0.001f;
         float speed = 0.1f;
         void on_notify(Event event) override;    
-        void update() override;
+        void update(const float dt) override;
     };
 }

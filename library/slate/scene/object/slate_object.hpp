@@ -28,7 +28,7 @@ namespace slate {
         template<typename T>
         std::shared_ptr<T> get_component();
 
-        void update();
+        void update(const float dt);
     };
 
     using SlateObjectPtr = std::shared_ptr<SlateObject>;

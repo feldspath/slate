@@ -70,9 +70,9 @@ namespace slate {
         return lights;
     }
 
-    void Scene::update() {
+    void Scene::update(const float dt) {
         for (auto& o : objects) {
-            o.second->update();
+            o.second->update(dt);
         }
     }
 }

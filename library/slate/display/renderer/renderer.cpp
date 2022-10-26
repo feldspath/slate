@@ -37,8 +37,11 @@ namespace slate {
             std::cerr << "Error::Renderer::run: the scene camera is not set\n";
             return;
         }
+        float previous_time = glfwGetTime();
         while (should_continue()) {
-            scene.update();
+            float current_time = glfwGetTime();
+            scene.update(current_time-previous_time);
+            previous_time = current_time;
             begin_frame();
             render(scene, scene.get_camera());
             end_frame();
