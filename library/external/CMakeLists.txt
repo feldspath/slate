@@ -27,7 +27,7 @@ if(MSVC)
 
     set(ASSIMP_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/assimp/include")
     include_directories(${ASSIMP_INCLUDE_DIRS})
-    set(ASSIMP_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/assimp/lib/assimp-vc143-mt.lib")
-    set(ASSIMP_DLL "${CMAKE_CURRENT_LIST_DIR}/assimp/lib/assimp-vc143-mt.dll")
+    set(ASSIMP_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/assimp/lib/assimp-vc143-mtd.lib")
+    set(ASSIMP_DLL "${CMAKE_CURRENT_LIST_DIR}/assimp/lib/assimp-vc143-mtd.dll")
 endif()
 
