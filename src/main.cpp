@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "scaling.hpp"
+#include "cs_test.hpp"
 
 // settings
 const unsigned int SCR_WIDTH = 800;
@@ -18,6 +19,7 @@ int main()
     slate::SlateObjectPtr obj = std::make_shared<slate::SlateObject>("cube");
     obj->add_component(std::make_shared<slate::MeshRendererComponent>(model, renderer.get_default_shader()));
     obj->add_component(std::make_shared<Scaling>());
+    obj->add_component(std::make_shared<CSTest>());
 
     // Camera
     slate::CameraPtr camera = std::make_shared<slate::Camera>();
