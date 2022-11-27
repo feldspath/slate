@@ -15,8 +15,7 @@ namespace slate {
         const char* cs_code = cs_str.c_str();
 
         // Vertex Shader Compilation
-        unsigned int cs_id;
-        cs_id = glCreateShader(GL_COMPUTE_SHADER);
+        unsigned int cs_id = glCreateShader(GL_COMPUTE_SHADER);
         glShaderSource(cs_id, 1, &cs_code, NULL);
         glCompileShader(cs_id);
 
@@ -33,15 +32,14 @@ namespace slate {
         glDeleteShader(cs_id);
 
         // SSBO
+        buffer_size = data.size() * sizeof(float);
         glGenBuffers(1, &ssbo);
         glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
-        glBufferData(GL_SHADER_STORAGE_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
+        glBufferStorage(GL_SHADER_STORAGE_BUFFER, buffer_size, data.data(), GL_MAP_READ_BIT);
         glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo);
         glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
     }
-
-    ComputeShader::ComputeShader() : program_id(-1) {}
-
 
     ComputeShader::~ComputeShader() {
         glDeleteProgram(program_id);
@@ -56,11 +54,14 @@ namespace slate {
         use();
         glDispatchCompute(width, height, depth);
         glMemoryBarrier(GL_ALL_BARRIER_BITS);
+
     }
 
-    void ComputeShader::read_data(unsigned int start, unsigned int end, std::vector<float> data) {
-        data = std::vector<float>(end-start);
-        glGetNamedBufferSubData(ssbo, sizeof(float) * start, sizeof(float) * data.size(), data.data());
+    void ComputeShader::read_data(unsigned int start, unsigned int end, std::vector<float>& data) {
+        data.resize(end-start);
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+        glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(float) * start, data.size() * sizeof(float), data.data());
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
     }
 
 

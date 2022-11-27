@@ -14,18 +14,19 @@ namespace slate {
         unsigned int ssbo;
         std::string cs_path;
 
+        size_t buffer_size;
+
         static std::string read_file(const std::string& path);
         static void check_compile_status(unsigned int shader_id, std::string debug_name);
         static void check_link_status(unsigned int program_id);
 
     public:
-        ComputeShader();
-        ComputeShader(const std::string& compute_sahder_path, const std::vector<float>& data);
+        ComputeShader(const std::string& compute_shader_path, const std::vector<float>& data);
         ~ComputeShader();
 
         void use() const;
         void dispatch(unsigned int width, unsigned int height, unsigned int depth);
-        void read_data(unsigned int start, unsigned int end, std::vector<float> data);
+        void read_data(unsigned int start, unsigned int end, std::vector<float>& data);
 
         void set_uniform(const std::string& name, const float value) const;
         void set_uniform(const std::string& name, const glm::vec2& value) const;
