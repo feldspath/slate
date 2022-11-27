@@ -13,11 +13,14 @@
 #include "../shader/shader.hpp"
 #include "../window/window.hpp"
 
+#include "../gui/gui.hpp"
+
 
 namespace slate {
     class Renderer {
     private:
         std::shared_ptr<Window> window;
+        std::unique_ptr<Gui> gui;
 
         ShaderPtr default_shader;
 

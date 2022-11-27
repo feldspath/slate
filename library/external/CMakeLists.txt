@@ -1,9 +1,15 @@
 # Add all source files of external libraries
-set(src_files_external "${CMAKE_CURRENT_LIST_DIR}/glad/src/glad.c")
+set(src_files_glad "${CMAKE_CURRENT_LIST_DIR}/glad/src/glad.c")
+FILE(GLOB src_files_imgui "${CMAKE_CURRENT_LIST_DIR}/imgui/include/imgui/*.cpp")
+
+set(src_files_external ${src_files_glad} ${src_files_imgui})
 
 # Add glm and glad include folders
 include_directories("${CMAKE_CURRENT_LIST_DIR}/glm/include")
 include_directories("${CMAKE_CURRENT_LIST_DIR}/glad/include/")
+
+# ImGui include folder
+include_directories("${CMAKE_CURRENT_LIST_DIR}/imgui/include/")
 
 # Enable IMGUI to work with GLAD
 # add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_GLAD)

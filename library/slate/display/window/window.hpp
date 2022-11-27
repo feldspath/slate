@@ -26,6 +26,7 @@ namespace slate {
 
         unsigned int get_width() const;
         unsigned int get_height() const;
+        GLFWwindow* get_window() const;
 
         void on_notify(Event event) override;
 

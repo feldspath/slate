@@ -13,7 +13,7 @@
 namespace slate {
     Renderer::Renderer(unsigned int width, unsigned int height, const std::string& name) : window(std::make_shared<Window>(width, height, name.c_str())), fov(100.0f), near_plane(0.1f), far_plane(100.0f) {
         load_shaders();
-        window->disable_cursor();
+        //window->disable_cursor();
         Callback::get().window_resize.add_observer(window);
         Input::get().set_window(window);
         glEnable(GL_DEPTH_TEST);
@@ -25,6 +25,9 @@ namespace slate {
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
         glBindBufferRange(GL_UNIFORM_BUFFER, 0, ubo_matrices, 0, 3 * sizeof(glm::mat4));
+
+        // GUI
+        gui = std::make_unique<Gui>(window);
     }
 
     Renderer::~Renderer() {
@@ -93,9 +96,11 @@ namespace slate {
 
     void Renderer::begin_frame() {
         window->process_input();
+        gui->init_frame();
     }
 
     void Renderer::end_frame() {
+        gui->render();
         window->end_frame();
     }
 

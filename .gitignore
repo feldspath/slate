@@ -1,3 +1,4 @@
 build/
+out/
 .vscode/
 library/slate/helper_dirs.hpp

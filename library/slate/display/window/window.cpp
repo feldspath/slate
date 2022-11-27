@@ -134,6 +134,10 @@ namespace slate {
         return height;
     }
 
+    GLFWwindow* Window::get_window() const {
+        return id;
+    }
+
     void Window::on_notify(Event event) {
         width = event.read_integer_arg("width");
         height = event.read_integer_arg("height");
