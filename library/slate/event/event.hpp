@@ -8,6 +8,7 @@ namespace slate {
     enum class EventType {
         WINDOW_RESIZE,
         MOUSE_MOVE,
+        CHRONO_DONE,
         COUNT
     };
 

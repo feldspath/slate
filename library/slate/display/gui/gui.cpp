@@ -21,9 +21,12 @@ namespace slate {
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        bool show_demo_window = true;
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
+        if (ImGui::CollapsingHeader("Benchmarks", ImGuiTreeNodeFlags_DefaultOpen)) {
+            for (auto &b : benches) {
+                std::string t = b.first + ": " + std::to_string(b.second) + "ms";
+                ImGui::Text(t.c_str());
+            }
+        }
     }
 
     void Gui::render() {
@@ -31,6 +34,15 @@ namespace slate {
         int display_w, display_h;
         glfwGetFramebufferSize(window->get_window(), &display_w, &display_h);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    }
+
+    void Gui::on_notify(Event e) {
+        if (e.type != EventType::CHRONO_DONE)
+            return;
+
+        std::string name = (*e.arguments.cbegin()).first;
+        float time = e.read_float_arg(name);
+        benches.insert_or_assign(name, time);
     }
 
 

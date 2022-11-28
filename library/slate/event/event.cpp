@@ -70,7 +70,8 @@ namespace slate {
     }
 
     void Event::error_arg_not_found(std::string arg_name) const {
-        std::cerr << "Warning::Event: argument " << arg_name << " not found in EventType " << static_cast<int>(type) << '\n';
+        std::cerr << "Error::Event: argument " << arg_name << " not found in EventType " << static_cast<int>(type) << '\n';
+        abort();
     }
 
     void Event::error_arg_wrong_type(std::string arg_name) const {

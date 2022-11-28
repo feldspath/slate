@@ -20,7 +20,7 @@ namespace slate {
     class Renderer {
     private:
         std::shared_ptr<Window> window;
-        std::unique_ptr<Gui> gui;
+        std::shared_ptr<Gui> gui;
 
         ShaderPtr default_shader;
 

@@ -10,6 +10,7 @@ namespace slate {
     public:
         Subject window_resize;
         Subject mouse_move;
+        Subject chronos;
 
         static Callback& get();
 

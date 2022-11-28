@@ -2,6 +2,7 @@
 
 #include "slate/slate.hpp"
 #include <slate/gpu_compute/compute_shader/compute_shader.hpp>
+#include <slate/utils/performance/performance.hpp>
 
 #include <vector>
 #include <iostream>
@@ -18,9 +19,10 @@ public:
     }
 
     virtual void update(const float dt) override {
+        slate::Benchmark bench("Compute Shader");
         cs->dispatch(1, 1, 1);
-        std::vector<float> res(1);
-        cs->read_data(0, 1, res);
-        std::cout << res[0] << '\n';
+        //std::vector<float> res(1);
+        //cs->read_data(0, 1, res);
+        //std::cout << res[0] << '\n';
     }
 };

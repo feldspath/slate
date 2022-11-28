@@ -1,6 +1,6 @@
 #include "slate_object.hpp"
 
-#include <slate/display/window/callbacks.hpp>
+#include <slate/event/callbacks/callbacks.hpp>
 
 namespace slate {
     unsigned int SlateObject::object_count = 0;

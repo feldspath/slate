@@ -2,7 +2,7 @@
 #include <memory>
 
 #include "window.hpp"
-#include "callbacks.hpp"
+#include <slate/event/callbacks/callbacks.hpp>
 
 static void APIENTRY dl_debug_output(GLenum source,
     GLenum type,
@@ -139,6 +139,9 @@ namespace slate {
     }
 
     void Window::on_notify(Event event) {
+        if (event.type != EventType::WINDOW_RESIZE)
+            return;
+
         width = event.read_integer_arg("width");
         height = event.read_integer_arg("height");
         glViewport(0, 0, width, height);

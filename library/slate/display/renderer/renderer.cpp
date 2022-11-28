@@ -4,10 +4,11 @@
 #include <slate/helper_dirs.hpp>
 #include <slate/component/graphic/mesh_renderer/mesh_renderer_component.hpp>
 #include <slate/input/input.hpp>
-#include "../window/callbacks.hpp"
+#include <slate/event/callbacks/callbacks.hpp>
 
 #include "renderer.hpp"
 
+#include <slate/utils/performance/performance.hpp>
 
 
 namespace slate {
@@ -27,7 +28,8 @@ namespace slate {
         glBindBufferRange(GL_UNIFORM_BUFFER, 0, ubo_matrices, 0, 3 * sizeof(glm::mat4));
 
         // GUI
-        gui = std::make_unique<Gui>(window);
+        gui = std::make_shared<Gui>(window);
+        Callback::get().chronos.add_observer(gui);
     }
 
     Renderer::~Renderer() {
@@ -42,6 +44,8 @@ namespace slate {
         }
         float previous_time = glfwGetTime();
         while (should_continue()) {
+            Benchmark bench("Main Loop");
+
             float current_time = glfwGetTime();
             scene.update(current_time-previous_time);
             previous_time = current_time;
@@ -59,6 +63,8 @@ namespace slate {
     }
 
     void Renderer::render(const Scene& scene, const CameraPtr camera) {
+        Benchmark bench("Rendering");
+
         // Matrices
         const glm::mat4 view_matrix = camera->view_matrix();
         const glm::mat4 view_matrix_inv = glm::inverse(view_matrix);
