@@ -24,19 +24,19 @@ include("library/CMakeLists.txt")
 #  @src_files_slate: all files of the slate library
 #  @src_files_external: all third party libraries compiled with the project
 add_executable(${executable_name} ${src_files_slate} ${src_files_external} ${src_files})
-set_property(TARGET ${executable_name} PROPERTY CXX_STANDARD 17)
+set_property(TARGET ${executable_name} PROPERTY CXX_STANDARD 20)
 
 
 # Set Compiler for Unix system
 if(UNIX)
    set(CMAKE_CXX_COMPILER g++)                      # Can switch to clang++ if prefered
-   add_definitions(-g -O2 -std=c++17 -Wall -Wextra -pthread) # Can adapt compiler flags if needed
+   add_definitions(-g -O2 -std=c++20 -Wall -Wextra -pthread) # Can adapt compiler flags if needed
    add_definitions(-Wno-sign-compare -Wno-type-limits) # Remove some warnings
 endif()
 
 # Set Compiler for Windows/Visual Studio
 if(MSVC)
-    add_definitions(/MP /W4 /wd4244 /wd4127 /wd4267)   # Parallel build (/MP)
+    add_definitions(/MP /wd4244 /wd4127 /wd4267)   # Parallel build (/MP)
     source_group(TREE ${CMAKE_SOURCE_DIR} FILES ${src_files})  # Allow to explore source directories as a tree in Visual Studio
     add_custom_command(TARGET ${executable_name} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${ASSIMP_DLL} $<TARGET_FILE_DIR:${executable_name}>) # Copy Assimp DLL to executable location
 endif()
