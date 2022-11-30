@@ -12,7 +12,7 @@ namespace slate {
         return vec;
     }
 
-    void ModelLoader::load_model(const std::string path) {
+    ModelLoader::ModelLoader(const std::string path) {
         Assimp::Importer import;
         const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
 
@@ -96,11 +96,11 @@ namespace slate {
         return raw_mesh;
     }
 
-    std::vector<RawMesh> ModelLoader::get_meshes() const {
+    const std::vector<RawMesh>& ModelLoader::get_meshes() const {
         return meshes;
     }
 
-    std::vector<std::shared_ptr<Material>> ModelLoader::get_materials() const {
+    const std::vector<std::shared_ptr<Material>>& ModelLoader::get_materials() const {
         return materials;
     }
 }

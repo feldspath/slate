@@ -27,8 +27,8 @@ namespace slate {
         void process_node(aiNode* node, const aiScene* scene);
         RawMesh process_mesh(aiMesh* mesh, const aiScene* scene);
     public:
-        void load_model(const std::string path);
-        std::vector<RawMesh> get_meshes() const;
-        std::vector<std::shared_ptr<Material>> get_materials() const;
+        ModelLoader(const std::string path);
+        const std::vector<RawMesh>& get_meshes() const;
+        const std::vector<std::shared_ptr<Material>>& get_materials() const;
     };
 }

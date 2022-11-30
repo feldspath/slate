@@ -6,8 +6,7 @@ namespace slate {
     }
 
     Model::Model(const std::string& path) {
-        ModelLoader loader;
-        loader.load_model(path);
+        ModelLoader loader(path);
         materials = loader.get_materials();
         init(loader.get_meshes());
     }

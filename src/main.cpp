@@ -3,8 +3,7 @@
 #include <iostream>
 #include <vector>
 
-#include "scaling.hpp"
-#include "cs_test.hpp"
+#include "deformable.hpp"
 
 // settings
 const unsigned int SCR_WIDTH = 800;
@@ -15,11 +14,8 @@ int main()
     slate::Renderer renderer(SCR_WIDTH, SCR_HEIGHT, "Slate");
 
     // Object
-    slate::ModelPtr model = std::make_shared<slate::Model>(std::string(ROOT_DIR) + "resources/test/test.obj");
     slate::SlateObjectPtr obj = std::make_shared<slate::SlateObject>("cube");
-    obj->add_component(std::make_shared<slate::MeshRendererComponent>(model, renderer.get_default_shader()));
-    obj->add_component(std::make_shared<Scaling>());
-    obj->add_component(std::make_shared<CSTest>());
+    obj->add_component(std::make_shared<Deformable>("", std::string(ROOT_DIR) + "resources/test/test.obj", renderer.get_default_shader()));
 
     // Camera
     slate::CameraPtr camera = std::make_shared<slate::Camera>();

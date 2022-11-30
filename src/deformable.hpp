@@ -9,19 +9,19 @@
 
 struct DeformVertex : public slate::Vertex {
     unsigned int voxel_id;
+
+    static std::vector<slate::ParamMetadata> vertex_info;
 };
 
-static std::vector<slate::ParamMetadata> vertex_info = {
-    slate::ParamMetadata { .size = 1, .type = GL_UNSIGNED_INT, .offset = (void*)offsetof(DeformVertex, voxel_id)}
-};
 
 class Deformable : public slate::GraphicComponent {
 private:
     slate::ShaderPtr shader;
     std::shared_ptr<slate::Mesh<DeformVertex>> mesh;
+    std::shared_ptr<slate::Material> material;
 
 public:
-    Deformable(const std::string& voxelization_path, const std::string& mesh_path);
+    Deformable(const std::string& voxelization_path, const std::string& mesh_path, slate::ShaderPtr shader);
     void update(const float dt) override;
     void render() override;
 };
