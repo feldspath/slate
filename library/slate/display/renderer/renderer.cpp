@@ -22,7 +22,7 @@ namespace slate {
         // UBO
         glGenBuffers(1, &ubo_matrices);
         glBindBuffer(GL_UNIFORM_BUFFER, ubo_matrices);
-        glBufferData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::mat4), NULL, GL_STATIC_DRAW);
+        glBufferData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
         glBindBufferRange(GL_UNIFORM_BUFFER, 0, ubo_matrices, 0, 3 * sizeof(glm::mat4));
@@ -75,7 +75,7 @@ namespace slate {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Lights
-        unsigned int light_count = 0;
+        int light_count = 0;
         default_shader->use();
         for (auto& light : scene.get_lights()) {
             if (light->get_type() == LightType::POINT) {

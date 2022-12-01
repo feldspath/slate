@@ -94,6 +94,10 @@ namespace slate {
         glUniform1f(glGetUniformLocation(program_id, name.c_str()), value);
     }
 
+    void Shader::set_uniform(const std::string& name, const int value) const {
+        glUniform1i(glGetUniformLocation(program_id, name.c_str()), value);
+    }
+
     void Shader::set_uniform(const std::string& name, const glm::vec2& value) const {
         glUniform2fv(glGetUniformLocation(program_id, name.c_str()), 1, &value[0]);
     }

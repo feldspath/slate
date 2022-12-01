@@ -23,8 +23,7 @@ namespace slate {
 
         if (ImGui::CollapsingHeader("Benchmarks", ImGuiTreeNodeFlags_DefaultOpen)) {
             for (auto &b : benches) {
-                std::string t = b.first + ": " + std::to_string(b.second) + "ms";
-                ImGui::Text(t.c_str());
+                ImGui::Text("%s: %fms", b.first.c_str(), b.second);
             }
         }
     }

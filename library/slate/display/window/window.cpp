@@ -8,12 +8,13 @@ static void APIENTRY dl_debug_output(GLenum source,
     GLenum type,
     unsigned int id,
     GLenum severity,
-    GLsizei length,
+    GLsizei,
     const char* message,
-    const void* userParam)
+    const void*)
 {
     // ignore non-significant error/warning codes
     if (id == 131169 || id == 131185 || id == 131218 || id == 131204) return;
+    if (severity == GL_DEBUG_SEVERITY_NOTIFICATION) return;
 
     std::cout << "---------------" << std::endl;
     std::cout << "Debug message (" << id << "): " << message << std::endl;

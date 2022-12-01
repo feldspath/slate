@@ -30,7 +30,7 @@ set_property(TARGET ${executable_name} PROPERTY CXX_STANDARD 20)
 # Set Compiler for Unix system
 if(UNIX)
    set(CMAKE_CXX_COMPILER g++)                      # Can switch to clang++ if prefered
-   add_definitions(-g -O2 -std=c++20 -Wall -Wextra -pthread) # Can adapt compiler flags if needed
+   add_definitions(-g -O2 -std=c++2a -Wall -Wextra -pthread) # Can adapt compiler flags if needed
    add_definitions(-Wno-sign-compare -Wno-type-limits) # Remove some warnings
 endif()
 
