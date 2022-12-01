@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "deformable.hpp"
+#include "cs_test.hpp"
 
 // settings
 const unsigned int SCR_WIDTH = 800;
@@ -16,6 +17,7 @@ int main()
     // Object
     slate::SlateObjectPtr obj = std::make_shared<slate::SlateObject>("cube");
     obj->add_component(std::make_shared<Deformable>("", std::string(ROOT_DIR) + "resources/test/test.obj", renderer.get_default_shader()));
+    obj->add_component(std::make_shared<CSTest>());
 
     // Camera
     slate::CameraPtr camera = std::make_shared<slate::Camera>();
