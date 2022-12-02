@@ -19,7 +19,7 @@ namespace slate {
         static std::string read_file(const std::string& path);
         static void check_compile_status(unsigned int shader_id, std::string debug_name);
         static unsigned int compile_shader(GLenum type, const std::string& code);
-        static void check_link_status(unsigned int id);
+        void check_link_status();
 
     public:
         void use() const;

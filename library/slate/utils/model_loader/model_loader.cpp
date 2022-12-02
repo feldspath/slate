@@ -69,10 +69,12 @@ namespace slate {
             raw_mesh.positions.push_back(position);
 
             // normal
-            glm::vec3 normal;
-            normal.x = mesh->mNormals[i].x;
-            normal.y = mesh->mNormals[i].y;
-            normal.z = mesh->mNormals[i].z;
+            glm::vec3 normal(0.0f, 0.0f, 0.0f);
+            if (mesh->mNormals) {
+                normal.x = mesh->mNormals[i].x;
+                normal.y = mesh->mNormals[i].y;
+                normal.z = mesh->mNormals[i].z;
+            }
             raw_mesh.normals.push_back(normal);
 
             // uv

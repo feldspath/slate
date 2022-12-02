@@ -76,7 +76,21 @@ namespace slate {
 
         int idx = 3;
         for (const ParamMetadata& p : params_info) {
-            glVertexAttribPointer(idx, p.size, p.type, GL_FALSE, sizeof(T), p.offset);
+            switch (p.type) {
+                case GL_FLOAT:
+                    glVertexAttribPointer(idx, p.size, p.type, GL_FALSE, sizeof(T), p.offset);
+                    break;
+                case GL_UNSIGNED_INT:
+                    glVertexAttribIPointer(idx, p.size, p.type, sizeof(T), p.offset);
+                    break;
+                case GL_INT:
+                    glVertexAttribIPointer(idx, p.size, p.type, sizeof(T), p.offset);
+                    break;
+                default:
+                    std::cerr << "Error::Mesh: additional parameter type not supported\n";
+                    continue;
+            }
+
             glEnableVertexAttribArray(idx);
             ++idx;
         }

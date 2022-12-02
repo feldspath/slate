@@ -14,7 +14,7 @@ namespace slate {
         glAttachShader(program_id, cs_id);
         glLinkProgram(program_id);
 
-        check_link_status(program_id);
+        check_link_status();
 
         // Delete Shaders
         glDeleteShader(cs_id);

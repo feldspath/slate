@@ -16,8 +16,10 @@ int main()
 
     // Object
     slate::SlateObjectPtr obj = std::make_shared<slate::SlateObject>("cube");
-    obj->add_component(std::make_shared<Deformable>("", std::string(ROOT_DIR) + "resources/test/test.obj", renderer.get_default_shader()));
-    obj->add_component(std::make_shared<CSTest>());
+    slate::ShaderPtr deform_shader = std::make_shared<slate::Shader>(std::string(ROOT_DIR) + "resources/shaders/deform.vs", std::string(ROOT_DIR) + "resources/shaders/deform.fs");
+    obj->add_component(std::make_shared<Deformable>("", std::string(ROOT_DIR) + "resources/test/test.obj", deform_shader));
+    //obj->add_component(std::make_shared<Deformable>("", std::string(ROOT_DIR) + "resources/test/test.obj", renderer.get_default_shader()));
+    //obj->add_component(std::make_shared<CSTest>());
 
     // Camera
     slate::CameraPtr camera = std::make_shared<slate::Camera>();

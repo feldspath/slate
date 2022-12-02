@@ -36,17 +36,14 @@ namespace slate {
         }
     }
 
-    void ShaderBase::check_link_status(unsigned int id) {
+    void ShaderBase::check_link_status() {
         int success;
-        std::cout << "checking link status\n";
-        glGetProgramiv(id, GL_LINK_STATUS, &success);
+        glGetProgramiv(program_id, GL_LINK_STATUS, &success);
         if (!success) {
             char info_log[512];
-            glGetProgramInfoLog(id, 512, NULL, info_log);
+            glGetProgramInfoLog(program_id, 512, NULL, info_log);
             std::cerr << "Error::Shader::Program::Linking: " << info_log << '\n';
         }
-        std::cout << "ok\n";
-
     }
 
     unsigned int ShaderBase::compile_shader(GLenum type, const std::string& code) {

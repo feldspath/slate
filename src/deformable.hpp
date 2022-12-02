@@ -20,6 +20,8 @@ private:
     std::shared_ptr<slate::Mesh<DeformVertex>> mesh;
     std::shared_ptr<slate::Material> material;
 
+    std::shared_ptr<slate::SSBO<float>> voxel_deformations;
+
 public:
     Deformable(const std::string& voxelization_path, const std::string& mesh_path, slate::ShaderPtr shader);
     void update(const float dt) override;
