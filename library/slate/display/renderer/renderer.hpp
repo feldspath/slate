@@ -10,9 +10,10 @@
 #include <slate/scene/mesh/mesh.hpp>
 #include <slate/scene/camera/camera_base.hpp>
 #include <slate/scene/scene.hpp>
+#include <slate/gpu_compute/ubo/ubo.hpp>
+
 #include "../shader/shader.hpp"
 #include "../window/window.hpp"
-
 #include "../gui/gui.hpp"
 
 
@@ -28,7 +29,7 @@ namespace slate {
         float near_plane;
         float far_plane;
 
-        unsigned int ubo_matrices;
+        UBO ubo_matrices;
 
         void load_shaders();
         void render(const Scene& scene, const CameraPtr camera);
