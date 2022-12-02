@@ -4,7 +4,7 @@
 
 out vec4 FragColor;
 
-layout (std140) uniform Matrices
+layout (std140, binding = 0) uniform Matrices
 {
     mat4 projection_matrix;
     mat4 view_matrix;
@@ -17,8 +17,11 @@ struct PointLight {
     float power;
 };
 
-uniform PointLight lights[32];
-uniform int light_count = 0;
+layout (std140, binding = 1) uniform Lights
+{
+    PointLight lights[32];
+    int light_count;
+};
 
 uniform vec3 diffuse;
 uniform vec3 ambient;

@@ -30,6 +30,7 @@ namespace slate {
         float far_plane;
 
         UBO ubo_matrices;
+        UBO ubo_lights;
 
         void load_shaders();
         void render(const Scene& scene, const CameraPtr camera);

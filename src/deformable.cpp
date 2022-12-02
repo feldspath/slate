@@ -24,7 +24,6 @@ Deformable::Deformable(const std::string& voxelization_path, const std::string& 
         v.normal = raw_mesh.normals[vertex_idx];
         v.uv = raw_mesh.uvs[vertex_idx];
         v.voxel_id = vertex_idx;
-        std::cout << v.voxel_id << '\n';
         vertex_idx++;
     }
 
@@ -36,7 +35,7 @@ Deformable::Deformable(const std::string& voxelization_path, const std::string& 
         deformations[3 * i + 1] = random_float();
         deformations[3 * i + 1] = random_float();
     }
-    voxel_deformations = std::make_shared <slate::SSBO<float>>(deformations);
+    voxel_deformations = std::make_shared <slate::SSBO>(sizeof(float) * deformations.size(), GL_MAP_READ_BIT, deformations.data());
 }
 
 void Deformable::update(const float dt) {

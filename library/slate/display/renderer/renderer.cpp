@@ -10,6 +10,7 @@
 
 #include <slate/utils/performance/performance.hpp>
 
+#define MAX_LIGHTS 32
 
 namespace slate {
     struct RenderMatrices {
@@ -18,7 +19,14 @@ namespace slate {
         glm::mat4 view_inverse;
     };
 
-    Renderer::Renderer(unsigned int width, unsigned int height, const std::string& name) : window(std::make_shared<Window>(width, height, name.c_str())), fov(100.0f), near_plane(0.1f), far_plane(100.0f), ubo_matrices(3 * sizeof(glm::mat4), GL_DYNAMIC_DRAW) {
+    struct GPULight {
+        glm::vec3 position;
+        float padding;
+        glm::vec3 color;
+        float power;
+    };
+
+    Renderer::Renderer(unsigned int width, unsigned int height, const std::string& name) : window(std::make_shared<Window>(width, height, name.c_str())), fov(100.0f), near_plane(0.1f), far_plane(100.0f), ubo_matrices(3 * sizeof(glm::mat4), GL_DYNAMIC_DRAW), ubo_lights(MAX_LIGHTS * sizeof(GPULight) + sizeof(int), GL_DYNAMIC_DRAW) {
         load_shaders();
         window->disable_cursor();
         Callback::get().window_resize.add_observer(window);
@@ -27,6 +35,7 @@ namespace slate {
 
         // UBO
         ubo_matrices.bind(0);
+        ubo_lights.bind(1);
 
         // GUI
         gui = std::make_shared<Gui>(window);
@@ -77,21 +86,26 @@ namespace slate {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Lights
+        std::vector<GPULight> gpu_lights;
         int light_count = 0;
-        default_shader->use();
         for (auto& light : scene.get_lights()) {
             if (light->get_type() == LightType::POINT) {
-                default_shader->set_uniform("lights[" + std::to_string(light_count) + "].position", light->transform.position);
-                default_shader->set_uniform("lights[" + std::to_string(light_count) + "].color", light->color);
-                default_shader->set_uniform("lights[" + std::to_string(light_count) + "].power", light->power);
+                GPULight gpu_light = {
+                    .position = light->transform.position,
+                    .color = light->color,
+                    .power = light->power
+                };
+                gpu_lights.push_back(gpu_light);
                 ++light_count;
             }
-            if (light_count == 32) break;
+            if (light_count == MAX_LIGHTS) break;
         }
-        default_shader->set_uniform("light_count", light_count);
 
         // Render
         ubo_matrices.update_buffer(0, sizeof(RenderMatrices), &render_matrices);
+        ubo_lights.update_buffer(0, sizeof(GPULight) * light_count, gpu_lights.data());
+        ubo_lights.update_buffer(sizeof(GPULight) * MAX_LIGHTS, sizeof(int), &light_count);
+
         auto render_objects = scene.components_by_type<GraphicComponent>();
         for (auto& o : render_objects) {
             o->render();
