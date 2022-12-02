@@ -12,7 +12,13 @@
 
 
 namespace slate {
-    Renderer::Renderer(unsigned int width, unsigned int height, const std::string& name) : window(std::make_shared<Window>(width, height, name.c_str())), fov(100.0f), near_plane(0.1f), far_plane(100.0f) {
+    struct RenderMatrices {
+        glm::mat4 projection;
+        glm::mat4 view;
+        glm::mat4 view_inverse;
+    };
+
+    Renderer::Renderer(unsigned int width, unsigned int height, const std::string& name) : window(std::make_shared<Window>(width, height, name.c_str())), fov(100.0f), near_plane(0.1f), far_plane(100.0f), ubo_matrices(3 * sizeof(glm::mat4), GL_DYNAMIC_DRAW) {
         load_shaders();
         window->disable_cursor();
         Callback::get().window_resize.add_observer(window);
@@ -20,12 +26,7 @@ namespace slate {
         glEnable(GL_DEPTH_TEST);
 
         // UBO
-        glGenBuffers(1, &ubo_matrices);
-        glBindBuffer(GL_UNIFORM_BUFFER, ubo_matrices);
-        glBufferData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
-        glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
-        glBindBufferRange(GL_UNIFORM_BUFFER, 0, ubo_matrices, 0, 3 * sizeof(glm::mat4));
+        ubo_matrices.bind(0);
 
         // GUI
         gui = std::make_shared<Gui>(window);
@@ -33,7 +34,6 @@ namespace slate {
     }
 
     Renderer::~Renderer() {
-        glDeleteBuffers(1, &ubo_matrices);
     }
 
     void Renderer::run(Scene& scene) {
@@ -66,9 +66,11 @@ namespace slate {
         Benchmark bench("Rendering");
 
         // Matrices
-        const glm::mat4 view_matrix = camera->view_matrix();
-        const glm::mat4 view_matrix_inv = glm::inverse(view_matrix);
-        const glm::mat4 projection_matrix = glm::perspective(glm::radians(fov), (float)window->get_width() / (float)window->get_height(), near_plane, far_plane);
+        RenderMatrices render_matrices = {
+            .projection = glm::perspective(glm::radians(fov), (float)window->get_width() / (float)window->get_height(), near_plane, far_plane),
+            .view = camera->view_matrix(),
+            .view_inverse = camera->transform.frame_matrix()
+        };
 
         // Clear buffers
         glClearColor(clear_color.x, clear_color.y, clear_color.z, 1.0f);
@@ -89,11 +91,7 @@ namespace slate {
         default_shader->set_uniform("light_count", light_count);
 
         // Render
-        glBindBuffer(GL_UNIFORM_BUFFER, ubo_matrices);
-        glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &projection_matrix[0][0]);
-        glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), &view_matrix[0][0]);
-        glBufferSubData(GL_UNIFORM_BUFFER, 2*sizeof(glm::mat4), sizeof(glm::mat4), &view_matrix_inv[0][0]);
-        glBindBuffer(GL_UNIFORM_BUFFER, 0);
+        ubo_matrices.update_buffer(0, sizeof(RenderMatrices), &render_matrices);
         auto render_objects = scene.components_by_type<GraphicComponent>();
         for (auto& o : render_objects) {
             o->render();
