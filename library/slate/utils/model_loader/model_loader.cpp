@@ -1,6 +1,7 @@
 #include "model_loader.hpp"
 
 #include <iostream>
+#include <array>
 
 namespace slate {
 
@@ -57,44 +58,87 @@ namespace slate {
         }
     }
 
-    RawMesh ModelLoader::process_mesh(aiMesh* mesh, const aiScene*) {
-        RawMesh raw_mesh;
+    static glm::vec3 compute_normal(const std::array<glm::vec3, 3>& triangle) {
+        const glm::vec3 e0 = triangle[1] - triangle[0];
+        const glm::vec3 e1 = triangle[2] - triangle[0];
 
-        for (unsigned int i = 0; i < mesh->mNumVertices; ++i) {
-            // pos
-            glm::vec3 position;
-            position.x = mesh->mVertices[i].x;
-            position.y = mesh->mVertices[i].y;
-            position.z = mesh->mVertices[i].z;
-            raw_mesh.positions.push_back(position);
+        glm::vec3 normal = glm::normalize(glm::cross(e0, e1));
+        return normal;
+    }
 
-            // normal
-            glm::vec3 normal(0.0f, 0.0f, 0.0f);
-            if (mesh->mNormals) {
-                normal.x = mesh->mNormals[i].x;
-                normal.y = mesh->mNormals[i].y;
-                normal.z = mesh->mNormals[i].z;
-            }
-            raw_mesh.normals.push_back(normal);
-
-            // uv
-            glm::vec2 uv(0.0f, 0.0f);
-            if (mesh->mTextureCoords[0]) {
-                uv.x = mesh->mTextureCoords[0][i].x;
-                uv.y = mesh->mTextureCoords[0][i].y;
-            }
-            raw_mesh.uvs.push_back(uv);
-
-        }
+    void ModelLoader::compute_normals(RawMesh& raw_mesh, const aiMesh* mesh) {
+        raw_mesh.normals.resize(mesh->mNumVertices, glm::vec3(0.0f));
 
         for (unsigned int i = 0; i < mesh->mNumFaces; ++i) {
             aiFace face = mesh->mFaces[i];
-            for (unsigned int j = 0; j < face.mNumIndices; ++j) {
-                // mNumIndices should always be 3 because of aiProcess_Triangulate
-                raw_mesh.indices.push_back(face.mIndices[j]);
+
+            // Retrieve triangle
+            std::array<glm::vec3, 3> triangle;
+            for (unsigned int j = 0; j < 3; ++j) {
+                triangle[j] = raw_mesh.positions[face.mIndices[j]];
+            }
+
+            // Compute normal
+            const glm::vec3 normal = compute_normal(triangle);
+
+            // Add it to every vertex
+            for (unsigned int j = 0; j < 3; ++j) {
+                raw_mesh.normals[face.mIndices[j]] += normal;
             }
         }
+
+        // Normalize computed normals
+        for (unsigned int i = 0; i < mesh->mNumVertices; ++i) {
+            raw_mesh.normals[i] = glm::normalize(raw_mesh.normals[i]);
+        }
+    }
+
+    RawMesh ModelLoader::process_mesh(aiMesh* mesh, const aiScene*) {
+        RawMesh raw_mesh;
+        
+        // Allocate vectors
+        raw_mesh.positions.resize(mesh->mNumVertices);
+        raw_mesh.normals.resize(mesh->mNumVertices);
+        raw_mesh.uvs.resize(mesh->mNumVertices, glm::vec2(0.0f));
+        raw_mesh.indices.resize(mesh->mNumFaces * 3);
+
+        bool has_normals = mesh->mNormals;
+
+        for (unsigned int i = 0; i < mesh->mNumVertices; ++i) {
+            // pos
+            raw_mesh.positions[i].x = mesh->mVertices[i].x;
+            raw_mesh.positions[i].y = mesh->mVertices[i].y;
+            raw_mesh.positions[i].z = mesh->mVertices[i].z;
+
+            // normal
+            if (has_normals) {
+                raw_mesh.normals[i].x = mesh->mNormals[i].x;
+                raw_mesh.normals[i].y = mesh->mNormals[i].y;
+                raw_mesh.normals[i].z = mesh->mNormals[i].z;
+            }
+
+            // uv
+            if (mesh->mTextureCoords[0]) {
+                raw_mesh.uvs[i].x = mesh->mTextureCoords[0][i].x;
+                raw_mesh.uvs[i].y = mesh->mTextureCoords[0][i].y;
+            }
+        }
+
+        for (unsigned int i = 0; i < mesh->mNumFaces; ++i) {
+            // Indices
+            aiFace face = mesh->mFaces[i];
+            for (unsigned int j = 0; j < 3; ++j) {
+                // mNumIndices should always be 3 because of aiProcess_Triangulate
+                raw_mesh.indices[3 * i + j] = (face.mIndices[j]);
+            }
+        }
+
         raw_mesh.material = materials[mesh->mMaterialIndex];
+
+        if (!has_normals) {
+            compute_normals(raw_mesh, mesh);
+        }
+
         return raw_mesh;
     }
 

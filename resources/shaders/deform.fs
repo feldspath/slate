@@ -27,7 +27,7 @@ uniform vec3 diffuse;
 uniform vec3 ambient;
 uniform vec3 specular;
 
-int specular_exp = 64;
+int specular_exp = 32;
 
 // world space frag info
 in vec3 fragPos;

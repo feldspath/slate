@@ -20,9 +20,8 @@ namespace slate {
     };
 
     struct GPULight {
-        glm::vec3 position;
-        float padding;
-        glm::vec3 color;
+        alignas(16) glm::vec3 position;
+        alignas(16) glm::vec3 color;
         float power;
     };
 

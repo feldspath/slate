@@ -26,6 +26,7 @@ namespace slate {
 
         void process_node(aiNode* node, const aiScene* scene);
         RawMesh process_mesh(aiMesh* mesh, const aiScene* scene);
+        void compute_normals(RawMesh& raw_mesh, const aiMesh* mesh);
     public:
         ModelLoader(const std::string path);
         const std::vector<RawMesh>& get_meshes() const;
