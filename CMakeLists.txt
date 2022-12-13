@@ -42,7 +42,7 @@ if(MSVC)
 endif()
 
 # Link libraries
-target_link_libraries(${executable_name} ${GLFW_LIBRARIES} ${ASSIMP_LIBRARIES})
+target_link_libraries(${executable_name} ${GLFW_LIBRARIES} ${ASSIMP_LIBRARIES} ${OPENBLAS_LIBRARIES})
 
 # Link options for Unix
 if(UNIX)

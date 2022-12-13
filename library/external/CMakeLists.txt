@@ -31,6 +31,10 @@ if(MSVC)
     include_directories(${GLFW_INCLUDE_DIRS})
     set(GLFW_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/glfw/lib/glfw3.lib")
 
+    set(OPENBLAS_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/openblas/include")
+    include_directories(${OPENBLAS_INCLUDE_DIRS})
+    set(OPENBLAS_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/openblas/lib/openblas.lib")
+
     set(ASSIMP_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/assimp/include")
     include_directories(${ASSIMP_INCLUDE_DIRS})
     set(ASSIMP_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/assimp/lib/assimp-vc143-mtd.lib")
