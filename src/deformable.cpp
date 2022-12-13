@@ -2,6 +2,7 @@
 
 #include <slate/utils/model_loader/model_loader.hpp>
 #include <slate/scene/object/slate_object.hpp>
+#include <slate/utils/performance/performance.hpp>
 #include <slate/helper_dirs.hpp>
 
 #include <fstream>
@@ -27,11 +28,8 @@ Deformable::Deformable(const std::string& voxelization_path, const std::string& 
     mesh = std::make_shared<slate::Mesh<slate::Vertex>>(vertices, raw_mesh.indices, material);
 
     // VOXELIZATION
-    import_voxelization(std::string(ROOT_DIR) + "resources/voxelizations/arm.txt");
+    import_voxelization(std::string(ROOT_DIR) + "resources/voxelizations/armv.txt");
     vertex_mapping = std::make_shared <slate::SSBO>(sizeof(float) * voxel_vertices_indices.size(), GL_MAP_READ_BIT, voxel_vertices_indices.data());
-
-    // SHADER
-    cs = std::make_shared<slate::ComputeShader>(std::string(ROOT_DIR) + "resources/compute_shaders/deform.glsl");
 
     // 3D texture of displacements
     glGenTextures(1, &vertex_offsets_tex);
@@ -41,6 +39,13 @@ Deformable::Deformable(const std::string& voxelization_path, const std::string& 
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA32F, width, height, depth, 0, GL_RGBA, GL_FLOAT, NULL);
     glBindImageTexture(0, vertex_offsets_tex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
+
+    // SIMULATION
+    import_simulation(std::string(ROOT_DIR) + "resources/voxelizations/arms.txt");
+    reduction_basis_ssbo = std::make_shared<slate::SSBO>(sizeof(float) * reduction_basis.size(), GL_MAP_READ_BIT, reduction_basis.data());
+
+    // Shader
+    cs = std::make_shared<slate::ComputeShader>(std::string(ROOT_DIR) + "resources/compute_shaders/deform.glsl");
 }
 
 Deformable::~Deformable() {
@@ -48,11 +53,14 @@ Deformable::~Deformable() {
 }
 
 void Deformable::update(const float dt) {
+    slate::Benchmark bench("Deform update");
     cs->use();
     cs->bind_ssbo(vertex_mapping->get_id(), 0);
+    cs->bind_ssbo(reduction_basis_ssbo->get_id(), 1);
     cs->set_uniform("width", width);
     cs->set_uniform("height", height);
     cs->set_uniform("depth", depth);
+    cs->set_uniform("r", r);
     cs->dispatch(width, height, depth);
 }
 
@@ -93,4 +101,50 @@ void Deformable::import_voxelization(const std::string& path) {
         file >> x >> y >> z;
         file >> voxel_vertices_indices[z * width * height + y * width + x];
     }
+
+    file.close();
+}
+
+void Deformable::import_simulation(const std::string& path) {
+    std::fstream file;
+    file.open(path, std::ios_base::in);
+
+    // Reduction Basis
+    int rows, cols;
+    file >> rows >> cols;
+    reduction_basis.resize(rows * cols);
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            file >> reduction_basis[i*cols + j];
+        }
+    }
+
+    // Polynomials
+    file >> r;
+    std::vector<Polynomial> polynomials(r, Polynomial(r));
+    for (auto& polynomial : polynomials) {
+        // linear terms
+        for (int i = 0; i < r; i++) {
+            file >> polynomial.get_linear(i);
+        }
+
+        // quadratic terms
+        for (int i = 0; i < r; i++) {
+            for (int j = i; j < r; j++) {
+                file >> polynomial.get_quadratic(i, j);
+            }
+        }
+
+        // cubic terms
+        for (int i = 0; i < r; i++) {
+            for (int j = i; j < r; j++)
+                for (int k = j; k < r; k++) {
+                    file >> polynomial.get_cubic(i, j, k);
+                }
+        }
+    }
+
+    file.close();
+
+    polynomial_generator = std::make_shared<PolynomialGenerator>(polynomials);
 }

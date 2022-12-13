@@ -9,6 +9,8 @@
 #include <vector>
 #include <map>
 
+#include "polynomial.hpp"
+
 class Deformable : public slate::GraphicComponent {
 private:
     slate::ShaderPtr shader;
@@ -27,10 +29,14 @@ private:
     std::shared_ptr<slate::SSBO> vertex_mapping;
     GLuint vertex_offsets_tex;
 
-
-    std::shared_ptr<slate::SSBO> voxel_deformations;
+    // Simulation
+    std::vector<float> reduction_basis;
+    std::shared_ptr<slate::SSBO> reduction_basis_ssbo;
+    int r;
+    std::shared_ptr<PolynomialGenerator> polynomial_generator;
     
     void import_voxelization(const std::string& path);
+    void import_simulation(const std::string& path);
 
 public:
     Deformable(const std::string& voxelization_path, const std::string& mesh_path, slate::ShaderPtr shader);
