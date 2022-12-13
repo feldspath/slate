@@ -37,7 +37,7 @@ int main()
     // Scene
     slate::Scene scene;
     scene.add(camera);
-    scene.add(cube);
+    //scene.add(cube);
     scene.add(armadillo);
     scene.add(light);
 

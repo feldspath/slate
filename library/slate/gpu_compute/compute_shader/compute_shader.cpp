@@ -25,7 +25,6 @@ namespace slate {
     }
 
     void ComputeShader::dispatch(unsigned int width, unsigned int height, unsigned int depth) {
-        use();
         glDispatchCompute(width, height, depth);
         glMemoryBarrier(GL_ALL_BARRIER_BITS);
     }

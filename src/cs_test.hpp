@@ -25,6 +25,7 @@ public:
 
     virtual void update(const float dt) override {
         slate::Benchmark bench("Compute Shader");
+        cs->use();
         cs->bind_ssbo(ssbo->get_id(), 0);
         cs->dispatch(1, 1, 1);
         std::vector<float> res;

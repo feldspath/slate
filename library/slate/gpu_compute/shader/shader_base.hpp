@@ -25,7 +25,6 @@ namespace slate {
         void use() const;
 
         void bind_ssbo(unsigned int ssbo_id, unsigned int index) const {
-            use();
             glBindBufferBase(GL_SHADER_STORAGE_BUFFER, index, ssbo_id);
         }
 
