@@ -22,7 +22,7 @@ namespace slate {
         void read_buffer(size_t offset, size_t read_size, void* data) const;
 
         template <typename T>
-        void update_buffer(size_t element_offset, const std::vector<T>& data);
+        void update_buffer(size_t element_offset, std::vector<T>& data);
 
         template <typename T>
         void read_buffer(size_t element_offset, size_t n_elements, std::vector<T>& data) const;
@@ -39,7 +39,7 @@ namespace slate {
     }
 
     template <typename T>
-    void GPUBuffer::update_buffer(size_t element_offset, const std::vector<T>& data) {
+    void GPUBuffer::update_buffer(size_t element_offset, std::vector<T>& data) {
         update_buffer(element_offset * sizeof(T), data.size() * sizeof(T), data.data());
     }
 }

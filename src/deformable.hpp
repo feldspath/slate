@@ -10,6 +10,7 @@
 #include <map>
 
 #include "polynomial.hpp"
+#include "solver.hpp"
 
 class Deformable : public slate::GraphicComponent {
 private:
@@ -30,11 +31,15 @@ private:
     GLuint vertex_offsets_tex;
 
     // Simulation
-    std::vector<float> reduction_basis;
-    std::shared_ptr<slate::SSBO> reduction_basis_ssbo;
     int r;
+    std::vector<float> reduction_basis;
+    std::vector<float> reduced_vector;
+    std::shared_ptr<slate::SSBO> reduction_basis_ssbo;
+    std::shared_ptr<slate::SSBO> reduced_vector_ssbo;
     std::shared_ptr<PolynomialGenerator> polynomial_generator;
-    
+    std::shared_ptr<ImplicitNewmarkSolver> solver;
+
+    // Import
     void import_voxelization(const std::string& path);
     void import_simulation(const std::string& path);
 

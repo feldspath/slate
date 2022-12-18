@@ -9,7 +9,7 @@ PolynomialGenerator::PolynomialGenerator(const std::vector<Polynomial>& polynomi
 std::vector<float> PolynomialGenerator::get_force(const std::vector<float>& q, const bool use_quadratic,
     const bool use_cubic) const {
     assert(q.size() == r);
-    std::vector<float> R(r);
+    std::vector<float> R(r, 0.0f);
     // Add linear terms
     for (int c = 0; c < r; c++) {
         for (int i = 0; i < r; i++) {
@@ -46,7 +46,8 @@ std::vector<float> PolynomialGenerator::get_force(const std::vector<float>& q, c
 }
 
 // TODO: fix double indexing
-std::vector<float> PolynomialGenerator::get_tangent_stiffness_mat(const std::vector<float>& q) const {
+std::vector<float> PolynomialGenerator::get_tangent_stiffness_mat(const std::vector<float>& q, const bool use_quadratic,
+    const bool use_cubic) const {
     assert(q.size() == r);
     std::vector<float> K(r * r, 0.0f);
 
@@ -58,20 +59,24 @@ std::vector<float> PolynomialGenerator::get_tangent_stiffness_mat(const std::vec
     }
 
     // Add quadratic terms
-    for (int a = 0; a < r; a++) {
-        for (int l = 0; l < r; l++) {
-            for (int i = 0; i < r; i++) {
-                K[a * r + l] += polynomials.at(a).get_quadratic(l, i) * q[i];
+    if (use_quadratic) {
+        for (int a = 0; a < r; a++) {
+            for (int l = 0; l < r; l++) {
+                for (int i = 0; i < r; i++) {
+                    K[a * r + l] += polynomials.at(a).get_quadratic(l, i) * q[i];
+                }
             }
         }
     }
 
     // Add cubic terms
-    for (int a = 0; a < r; a++) {
-        for (int l = 0; l < r; l++) {
-            for (int i = 0; i < r; i++) {
-                for (int j = 0; j < r; j++) {
-                    K[a * r + l] += polynomials.at(a).get_cubic(l, i, j) * q[i] * q[j];
+    if (use_cubic) {
+        for (int a = 0; a < r; a++) {
+            for (int l = 0; l < r; l++) {
+                for (int i = 0; i < r; i++) {
+                    for (int j = 0; j < r; j++) {
+                        K[a * r + l] += polynomials.at(a).get_cubic(l, i, j) * q[i] * q[j];
+                    }
                 }
             }
         }

@@ -82,7 +82,8 @@ public:
         const bool use_cubic = true) const;
 
     // Returns tangent stiffness matrix in reduced coordinates
-    std::vector<float> get_tangent_stiffness_mat(const std::vector<float>& q) const;
+    std::vector<float> get_tangent_stiffness_mat(const std::vector<float>& q, const bool use_quadratic = true,
+        const bool use_cubic = true) const;
 
 private:
     const int r;

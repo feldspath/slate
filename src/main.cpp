@@ -18,13 +18,13 @@ int main()
     slate::ShaderPtr deform_shader = std::make_shared<slate::Shader>(std::string(ROOT_DIR) + "resources/shaders/deform.vs", std::string(ROOT_DIR) + "resources/shaders/deform.fs");
 
     // Cube
-    slate::SlateObjectPtr cube = std::make_shared<slate::SlateObject>("cube");
-    cube->add_component(std::make_shared<Deformable>("", std::string(ROOT_DIR) + "resources/test/test.obj", deform_shader));
+    //slate::SlateObjectPtr cube = std::make_shared<slate::SlateObject>("cube");
+    //cube->add_component(std::make_shared<Deformable>("", std::string(ROOT_DIR) + "resources/test/test.obj", deform_shader));
 
-    // Armadillo
-    slate::SlateObjectPtr armadillo = std::make_shared<slate::SlateObject>("armadillo");
-    armadillo->add_component(std::make_shared<Deformable>("", std::string(ROOT_DIR) + "resources/models/armadillo_1k.off", deform_shader));
-    armadillo->transform.scale = glm::vec3(10.0f);
+    // Cactus
+    slate::SlateObjectPtr cactus = std::make_shared<slate::SlateObject>("armadillo");
+    cactus->add_component(std::make_shared<Deformable>("", std::string(ROOT_DIR) + "resources/models/cactus_small.off", deform_shader));
+    cactus->transform.scale = glm::vec3(10.0f);
 
     // Camera
     slate::CameraPtr camera = std::make_shared<slate::Camera>();
@@ -38,14 +38,15 @@ int main()
     slate::Scene scene;
     scene.add(camera);
     //scene.add(cube);
-    scene.add(armadillo);
+    scene.add(cactus);
     scene.add(light);
 
     // Setting some parameters
     light->power = 40.0f;
     renderer.clear_color = glm::vec3(0.02f, 0.02f, 0.03f);
-    cube->transform.position = glm::vec3(0.0f, 0.0f, -2.0f);
-    armadillo->transform.position = glm::vec3(0.0f, -3.0f, 2.0f);
+    //cube->transform.position = glm::vec3(0.0f, 0.0f, -2.0f);
+    cactus->transform.position = glm::vec3(0.0f, -3.0f, 2.0f);
+    cactus->transform.rotation = glm::angleAxis(-glm::pi<float>() * 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));
 
     // render loop
     renderer.run(scene);

@@ -28,7 +28,7 @@ Deformable::Deformable(const std::string& voxelization_path, const std::string& 
     mesh = std::make_shared<slate::Mesh<slate::Vertex>>(vertices, raw_mesh.indices, material);
 
     // VOXELIZATION
-    import_voxelization(std::string(ROOT_DIR) + "resources/voxelizations/armv.txt");
+    import_voxelization(std::string(ROOT_DIR) + "resources/voxelizations/cactusv.txt");
     vertex_mapping = std::make_shared <slate::SSBO>(sizeof(float) * voxel_vertices_indices.size(), GL_MAP_READ_BIT, voxel_vertices_indices.data());
 
     // 3D texture of displacements
@@ -41,8 +41,28 @@ Deformable::Deformable(const std::string& voxelization_path, const std::string& 
     glBindImageTexture(0, vertex_offsets_tex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
 
     // SIMULATION
-    import_simulation(std::string(ROOT_DIR) + "resources/voxelizations/arms.txt");
+    import_simulation(std::string(ROOT_DIR) + "resources/voxelizations/cactussl.txt");
     reduction_basis_ssbo = std::make_shared<slate::SSBO>(sizeof(float) * reduction_basis.size(), GL_MAP_READ_BIT, reduction_basis.data());
+
+    reduced_vector = std::vector<float>(r, 0.0f);
+    reduced_vector_ssbo = std::make_shared<slate::SSBO>(sizeof(float) * r, GL_DYNAMIC_STORAGE_BIT, reduced_vector.data());
+
+    std::vector<float> mass_matrix(r*r, 0.0f);
+    for (int i = 0; i < r; ++i) {
+        mass_matrix[r * i + i] = 1.0f;
+    }
+    double damping_mass = 0.0f;
+    double damping_stiffness = 1e-2;
+    const int max_newton_raphson = 10;
+    double residual_tolerance = 1e-5;
+    const double beta_newmark = 0.25;
+    const double gamma_newmark = 0.5;
+
+    reduced_vector[0] = 0.5f;
+    reduced_vector[5] = -0.3f;
+    std::vector<float> du0(r, 0.0f);
+
+    solver = std::make_shared<ImplicitNewmarkSolver>(reduced_vector, du0, mass_matrix, polynomial_generator, max_newton_raphson, residual_tolerance, damping_mass, damping_stiffness, beta_newmark, gamma_newmark);
 
     // Shader
     cs = std::make_shared<slate::ComputeShader>(std::string(ROOT_DIR) + "resources/compute_shaders/deform.glsl");
@@ -54,9 +74,16 @@ Deformable::~Deformable() {
 
 void Deformable::update(const float dt) {
     slate::Benchmark bench("Deform update");
+
+    solver->compute_next_step(dt, std::vector<float>(r, 0.0f));
+    reduced_vector = solver->get_u();
+
+    reduced_vector_ssbo->update_buffer(0, reduced_vector);
+
     cs->use();
     cs->bind_ssbo(vertex_mapping->get_id(), 0);
     cs->bind_ssbo(reduction_basis_ssbo->get_id(), 1);
+    cs->bind_ssbo(reduced_vector_ssbo->get_id(), 2);
     cs->set_uniform("width", width);
     cs->set_uniform("height", height);
     cs->set_uniform("depth", depth);
