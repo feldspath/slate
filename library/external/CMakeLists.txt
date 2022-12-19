@@ -11,6 +11,9 @@ include_directories("${CMAKE_CURRENT_LIST_DIR}/glad/include/")
 # ImGui include folder
 include_directories("${CMAKE_CURRENT_LIST_DIR}/imgui/include/")
 
+# OpenBLAS include directories
+include_directories("${CMAKE_CURRENT_LIST_DIR}/openblas/include")
+
 # Enable IMGUI to work with GLAD
 # add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_GLAD)
 
@@ -19,6 +22,8 @@ if(UNIX)
     #expect GLFW3 already installed on the system
     find_package(glfw3 REQUIRED)
     find_package(PkgConfig REQUIRED)
+    find_package(BLAS REQUIRED)
+    find_package(LAPACK REQUIRED)
     pkg_search_module(GLFW REQUIRED glfw3)
     include_directories(${GLFW_INCLUDE_DIRS})
     
@@ -31,8 +36,6 @@ if(MSVC)
     include_directories(${GLFW_INCLUDE_DIRS})
     set(GLFW_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/glfw/lib/glfw3.lib")
 
-    set(OPENBLAS_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/openblas/include")
-    include_directories(${OPENBLAS_INCLUDE_DIRS})
     set(OPENBLAS_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/openblas/lib/openblas.lib")
 
     set(ASSIMP_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/assimp/include")
