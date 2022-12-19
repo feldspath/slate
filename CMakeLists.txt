@@ -1,5 +1,5 @@
 
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.10)
 
 # List the files of the current local project 
 #    Default behavior: Automatically add all hpp and cpp files from src/ directory
@@ -42,7 +42,7 @@ if(MSVC)
 endif()
 
 # Link libraries
-target_link_libraries(${executable_name} ${GLFW_LIBRARIES} ${ASSIMP_LIBRARIES} ${OPENBLAS_LIBRARIES})
+target_link_libraries(${executable_name} ${GLFW_LIBRARIES} ${ASSIMP_LIBRARIES} ${OpenBLAS_LIBRARIES})
 
 # Link options for Unix
 if(UNIX)
