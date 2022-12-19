@@ -51,4 +51,6 @@ public:
     void render() override;
 
     void add_external_force(int vertex_index, glm::vec3 force);
+
+    bool active = false;
 };

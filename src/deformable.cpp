@@ -58,7 +58,8 @@ Deformable::~Deformable() {
 }
 
 void Deformable::add_external_force(int vertex_index, glm::vec3 force) {
-    glm::vec3 local_force = glm::inverse(get_target()->transform.frame_matrix()) * glm::vec4(force, 0.0f);
+    if (!active) return;
+    glm::vec3 local_force = glm::toMat4(glm::inverse(get_target()->transform.rotation)) * glm::vec4(force, 0.0f);
 
     external_forces[3*vertex_index+0] = local_force.x;
     external_forces[3*vertex_index+1] = local_force.y;
@@ -66,6 +67,7 @@ void Deformable::add_external_force(int vertex_index, glm::vec3 force) {
 }
 
 void Deformable::update(std::shared_ptr<slate::Scene>, const float dt) {
+    if (!active) return;
     slate::Benchmark bench("Deform update");
 
     std::vector<float> reduced_external_forces(r);
@@ -112,6 +114,7 @@ void Deformable::update(std::shared_ptr<slate::Scene>, const float dt) {
 }
 
 void Deformable::render() {
+    if (!active) return;
     auto obj = get_target();
     if (!obj)  return;
 

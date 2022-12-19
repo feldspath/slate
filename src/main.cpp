@@ -41,8 +41,14 @@ int main()
     auto scene = std::make_shared<slate::Scene>();
     scene->add(camera);
 
-    for (int i = 0; i < 10; ++i) {
-        for (int j = 0; j < 5; ++j) {
+    auto cactus = create_cactus();
+    cactus->transform.scale = glm::vec3(2.0f);
+    cactus->transform.position = glm::vec3(-1.0f, -1.0f, -1.0f);
+    cactus->get_component<Deformable>()->active = true;
+    scene->add(cactus);
+
+    for (int i = 0; i < 15; ++i) {
+        for (int j = 0; j < 15; ++j) {
             auto cactus = create_cactus();
             cactus->transform.scale = glm::vec3(2.0f);
             cactus->transform.position = glm::vec3(-1.0f + j * 1.0f, -1.0f, i * 1.0f);
