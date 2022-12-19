@@ -6,6 +6,7 @@
 
 #include <slate/display/glad/glad.hpp>
 #include <slate/display/shader/shader.hpp>
+#include <slate/utils/model_loader/model_loader.hpp>
 #include "../material/material.hpp"
 
 #include <glm/glm.hpp>
@@ -30,13 +31,16 @@ namespace slate {
     private:
         std::vector<T> vertices;
         std::vector<unsigned int> indices;
-        std::weak_ptr<Material> material;
+        std::shared_ptr<Material> material;
 
         unsigned int vao, vbo, ebo;
         unsigned int n_triangles;
 
+        void init(std::vector<ParamMetadata> params_info = std::vector<ParamMetadata>());
+
     public:
-        Mesh(const std::vector<T> vertices_, const std::vector<unsigned int> indices_, const std::weak_ptr<Material> material_, std::vector<ParamMetadata> params_info = std::vector<ParamMetadata>());
+        Mesh(const std::string& path);
+        Mesh(const std::vector<T> vertices_, const std::vector<unsigned int> indices_, const std::shared_ptr<Material> material_, std::vector<ParamMetadata> params_info = std::vector<ParamMetadata>());
         ~Mesh();
 
         void draw(const ShaderPtr shader) const;
@@ -44,7 +48,16 @@ namespace slate {
 
     using MeshPtr = std::shared_ptr<Mesh<Vertex>>;
 
-    template<typename T> Mesh<T>::Mesh(const std::vector<T> vertices_, const std::vector<unsigned int> indices_, const std::weak_ptr<Material> material_, std::vector<ParamMetadata> params_info) : vertices(vertices_), indices(indices_), material(material_) {
+    template<typename T> Mesh<T>::Mesh(const std::vector<T> vertices_, const std::vector<unsigned int> indices_, const std::shared_ptr<Material> material_, std::vector<ParamMetadata> params_info) : vertices(vertices_), indices(indices_), material(material_) {
+        init(params_info);
+    }
+
+    template<typename T> Mesh<T>::~Mesh() {
+        glDeleteVertexArrays(1, &vao);
+        glDeleteBuffers(1, &vbo);
+    }
+
+    template<typename T> void Mesh<T>::init(std::vector<ParamMetadata> params_info) {
         assert(vertices.size() > 0);
         unsigned int n_indices = indices.size();
         n_triangles = n_indices / 3;
@@ -77,18 +90,18 @@ namespace slate {
         int idx = 3;
         for (const ParamMetadata& p : params_info) {
             switch (p.type) {
-                case GL_FLOAT:
-                    glVertexAttribPointer(idx, p.size, p.type, GL_FALSE, sizeof(T), p.offset);
-                    break;
-                case GL_UNSIGNED_INT:
-                    glVertexAttribIPointer(idx, p.size, p.type, sizeof(T), p.offset);
-                    break;
-                case GL_INT:
-                    glVertexAttribIPointer(idx, p.size, p.type, sizeof(T), p.offset);
-                    break;
-                default:
-                    std::cerr << "Error::Mesh: additional parameter type not supported\n";
-                    continue;
+            case GL_FLOAT:
+                glVertexAttribPointer(idx, p.size, p.type, GL_FALSE, sizeof(T), p.offset);
+                break;
+            case GL_UNSIGNED_INT:
+                glVertexAttribIPointer(idx, p.size, p.type, sizeof(T), p.offset);
+                break;
+            case GL_INT:
+                glVertexAttribIPointer(idx, p.size, p.type, sizeof(T), p.offset);
+                break;
+            default:
+                std::cerr << "Error::Mesh: additional parameter type not supported\n";
+                continue;
             }
 
             glEnableVertexAttribArray(idx);
@@ -100,22 +113,16 @@ namespace slate {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
-    template<typename T> Mesh<T>::~Mesh() {
-        glDeleteVertexArrays(1, &vao);
-        glDeleteBuffers(1, &vbo);
-    }
-
     template<typename T> void Mesh<T>::draw(const ShaderPtr shader) const {
         // assume the shader is already used, we only pass the shader for uniforms
-        auto mat = material.lock();
-        if (!mat) {
+        if (!material) {
             std::cerr << "Error::Mesh::Draw: material has expired\n";
             abort();
         }
 
-        shader->set_uniform("diffuse", mat->diffuse);
-        shader->set_uniform("ambient", mat->ambient);
-        shader->set_uniform("specular", mat->specular);
+        shader->set_uniform("diffuse", material->diffuse);
+        shader->set_uniform("ambient", material->ambient);
+        shader->set_uniform("specular", material->specular);
 
         glBindVertexArray(vao);
         glDrawElements(GL_TRIANGLES, n_triangles * 3, GL_UNSIGNED_INT, 0);

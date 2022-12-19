@@ -33,7 +33,7 @@ namespace slate {
         UBO ubo_lights;
 
         void load_shaders();
-        void render(const Scene& scene, const CameraPtr camera);
+        void render(std::shared_ptr<Scene> scene, const CameraPtr camera);
         void begin_frame();
         void end_frame();
         bool should_continue() const;
@@ -42,7 +42,7 @@ namespace slate {
         Renderer(unsigned int width, unsigned int height, const std::string& name);
         ~Renderer();
 
-        void run(Scene& scene);
+        void run(std::shared_ptr<Scene> scene);
         glm::vec3 clear_color = glm::vec3(0.0f);
         ShaderPtr get_default_shader();
     };

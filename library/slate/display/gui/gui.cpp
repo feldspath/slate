@@ -33,6 +33,8 @@ namespace slate {
         int display_w, display_h;
         glfwGetFramebufferSize(window->get_window(), &display_w, &display_h);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        benches.clear();
     }
 
     void Gui::on_notify(Event e) {
@@ -41,7 +43,12 @@ namespace slate {
 
         std::string name = (*e.arguments.cbegin()).first;
         float time = e.read_float_arg(name);
-        benches.insert_or_assign(name, time);
+        if (benches.find(name) != benches.end()) {
+            benches.find(name)->second += time;
+        }
+        else {
+            benches.insert(std::pair<std::string, float>(name, time));
+        }
     }
 
 

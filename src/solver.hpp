@@ -53,7 +53,7 @@ public:
     virtual void compute_next_step(float dt, const std::vector<float>& external_forces) override;
 
 private:
-    int max_newton_raphson = 2.0f;
+    int max_newton_raphson = 2;
     float residual_tolerance = 1e-5f;
     std::shared_ptr<PolynomialGenerator> polynomial_generator;
 

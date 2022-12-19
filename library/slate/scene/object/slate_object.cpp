@@ -20,9 +20,9 @@ namespace slate {
         Callback::get().window_resize.add_observer(std::dynamic_pointer_cast<Observer>(component));
     }
 
-    void SlateObject::update(const float dt) {
+    void SlateObject::update(std::shared_ptr<Scene> scene, const float dt) {
         for (auto& c : components) {
-            c->update(dt);
+            c->update(scene, dt);
         }
     }
 }

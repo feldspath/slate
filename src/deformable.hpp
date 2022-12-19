@@ -34,6 +34,7 @@ private:
     int r;
     std::vector<float> reduction_basis;
     std::vector<float> reduced_vector;
+    std::vector<float> external_forces;
     std::shared_ptr<slate::SSBO> reduction_basis_ssbo;
     std::shared_ptr<slate::SSBO> reduced_vector_ssbo;
     std::shared_ptr<PolynomialGenerator> polynomial_generator;
@@ -44,8 +45,10 @@ private:
     void import_simulation(const std::string& path);
 
 public:
-    Deformable(const std::string& voxelization_path, const std::string& mesh_path, slate::ShaderPtr shader);
+    Deformable(slate::MeshPtr mesh, slate::ShaderPtr shader);
     ~Deformable();
-    void update(const float dt) override;
+    void update(std::shared_ptr<slate::Scene>, const float dt) override;
     void render() override;
+
+    void add_external_force(int vertex_index, glm::vec3 force);
 };

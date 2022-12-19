@@ -55,7 +55,7 @@ void main() {
         // specular
         vec3 specular_col = radiance * specular * (specular_exp + 2) / (specular_exp * M_PI) * pow(max(dot(wh, fragNormal), 0.0f), specular_exp);
         
-        col += diffuse_col + specular_col;
+        col += diffuse_col;// + specular_col;
     }
 
     FragColor = vec4(col, 1.0f);

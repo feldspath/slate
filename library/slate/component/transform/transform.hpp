@@ -16,7 +16,7 @@ namespace slate {
 
         Transform();
 
-        void update(const float) override {}
+        void update(std::shared_ptr<Scene>, const float) override {}
 
         glm::mat4 frame_matrix() const;
         glm::vec3 front() const;

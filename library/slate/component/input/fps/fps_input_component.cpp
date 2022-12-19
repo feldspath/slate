@@ -31,7 +31,7 @@ namespace slate {
         obj->transform.rotation = camera_movement * obj->transform.rotation;
     }
 
-    void FpsInputComponent::update(const float) {
+    void FpsInputComponent::update(std::shared_ptr<Scene>, const float) {
         auto obj = get_target();
         if (!obj) return;
 

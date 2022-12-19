@@ -15,8 +15,8 @@ namespace slate {
 
     public:
         float sensitivity = 0.001f;
-        float speed = 0.1f;
+        float speed = 0.05f;
         void on_notify(Event event) override;    
-        void update(const float dt) override;
+        void update(std::shared_ptr<Scene>, const float dt) override;
     };
 }

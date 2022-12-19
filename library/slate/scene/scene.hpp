@@ -10,7 +10,7 @@
 #include "camera/camera_base.hpp"
 
 namespace slate {
-    class Scene {
+    class Scene : public std::enable_shared_from_this<Scene> {
     private:
         std::map<std::string, SlateObjectPtr> objects;
         std::vector<std::shared_ptr<Light>> lights;

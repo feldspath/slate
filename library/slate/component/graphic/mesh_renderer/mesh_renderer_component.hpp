@@ -14,6 +14,6 @@ namespace slate {
         MeshRendererComponent(ModelPtr mesh_, ShaderPtr shader_ = nullptr);
         
         void render() override;
-        void update(const float) override {}
+        void update(std::shared_ptr<Scene>, const float) override {}
     };
 }

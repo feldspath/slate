@@ -44,8 +44,8 @@ namespace slate {
     Renderer::~Renderer() {
     }
 
-    void Renderer::run(Scene& scene) {
-        auto& camera = scene.get_camera();
+    void Renderer::run(std::shared_ptr<Scene> scene) {
+        auto& camera = scene->get_camera();
         if (!camera) {
             std::cerr << "Error::Renderer::run: the scene camera is not set\n";
             return;
@@ -55,10 +55,10 @@ namespace slate {
             Benchmark bench("Main Loop");
 
             float current_time = glfwGetTime();
-            scene.update(current_time-previous_time);
+            scene->update(current_time-previous_time);
             previous_time = current_time;
             begin_frame();
-            render(scene, scene.get_camera());
+            render(scene, scene->get_camera());
             end_frame();
         }
     }
@@ -70,7 +70,7 @@ namespace slate {
         default_shader->set_uniform_block("Matrices", 0);
     }
 
-    void Renderer::render(const Scene& scene, const CameraPtr camera) {
+    void Renderer::render(const std::shared_ptr<Scene> scene, const CameraPtr camera) {
         Benchmark bench("Rendering");
 
         // Matrices
@@ -87,7 +87,7 @@ namespace slate {
         // Lights
         std::vector<GPULight> gpu_lights;
         int light_count = 0;
-        for (auto& light : scene.get_lights()) {
+        for (auto& light : scene->get_lights()) {
             if (light->get_type() == LightType::POINT) {
                 GPULight gpu_light = {
                     .position = light->transform.position,
@@ -105,7 +105,7 @@ namespace slate {
         ubo_lights.update_buffer(0, sizeof(GPULight) * light_count, gpu_lights.data());
         ubo_lights.update_buffer(sizeof(GPULight) * MAX_LIGHTS, sizeof(int), &light_count);
 
-        auto render_objects = scene.components_by_type<GraphicComponent>();
+        auto render_objects = scene->components_by_type<GraphicComponent>();
         for (auto& o : render_objects) {
             o->render();
         }

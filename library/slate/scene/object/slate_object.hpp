@@ -9,6 +9,8 @@
 #include <iostream>
 
 namespace slate {
+    class Scene;
+
     class SlateObject : public std::enable_shared_from_this<SlateObject> {
     private:
         unsigned int id;
@@ -28,7 +30,7 @@ namespace slate {
         template<typename T>
         std::shared_ptr<T> get_component();
 
-        void update(const float dt);
+        void update(std::shared_ptr<Scene> scene, const float dt);
     };
 
     using SlateObjectPtr = std::shared_ptr<SlateObject>;

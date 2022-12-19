@@ -72,7 +72,7 @@ namespace slate {
 
     void Scene::update(const float dt) {
         for (auto& o : objects) {
-            o.second->update(dt);
+            o.second->update(shared_from_this(), dt);
         }
     }
 }

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <slate/scene/material/material.hpp>
-#include <slate/scene/mesh/mesh.hpp>
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -16,7 +15,7 @@ namespace slate {
         std::vector<glm::vec3> normals;
         std::vector<glm::vec2> uvs;
         std::vector<unsigned int> indices;
-        std::weak_ptr<Material> material;
+        std::shared_ptr<Material> material;
     };
 
     class ModelLoader {
