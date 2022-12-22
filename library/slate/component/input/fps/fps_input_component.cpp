@@ -44,6 +44,8 @@ namespace slate {
         if (glm::dot(direction, direction) < 0.1f) return;
 
         obj->transform.position += glm::normalize(direction) * speed;
+
+        obj->transform.position.y = 0.0f;
     }
 
 }
